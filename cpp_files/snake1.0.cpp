@@ -1,7 +1,7 @@
 #include "raylib.h"
-#include "snake.h"
-#include "globalFunc.h"
-#include "globalSettings.h"
+#include "snake.hpp"
+#include "globalFunc.hpp"
+#include "globalSettings.hpp"
 #include <vector>
 #include <fstream>
 

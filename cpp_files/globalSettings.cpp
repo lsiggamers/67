@@ -1,5 +1,5 @@
-#include "globalFunc.h"
-#include "globalSettings.h"
+#include "globalFunc.hpp"
+#include "globalSettings.hpp"
 #include "raylib.h"
 #include <fstream>
 #include <iostream>

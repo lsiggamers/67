@@ -1,8 +1,8 @@
-#include "settingsApplications.h"
+#include "settingsApplications.hpp"
 #include "raylib.h"
-#include "globalSettings.h"
-#include "globalFunc.h"
-#include "topMenu.h"
+#include "globalSettings.hpp"
+#include "globalFunc.hpp"
+#include "topMenu.hpp"
 #include <string>
 #include <vector>
 

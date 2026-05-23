@@ -1,10 +1,10 @@
 #include "raylib.h"
-#include "globalFunc.h"
-#include "globalSettings.h"
-#include "mainMenu.h"
-#include "topMenu.h"
-#include "snake.h"
-#include "settingsApplications.h"
+#include "globalFunc.hpp"
+#include "globalSettings.hpp"
+#include "mainMenu.hpp"
+#include "topMenu.hpp"
+#include "snake.hpp"
+#include "settingsApplications.hpp"
 #include <vector>
 
 std::vector<application> desktop;

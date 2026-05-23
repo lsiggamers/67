@@ -1,5 +1,5 @@
 #include "raylib.h"
-#include "globalFunc.h"
+#include "globalFunc.hpp"
 #include <random>
 
 void DrawCenteredText(const char* text, int x, int y, int fontSize, Color color) {

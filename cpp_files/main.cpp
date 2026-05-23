@@ -1,6 +1,6 @@
 #include "raylib.h"
-#include "globalSettings.h"
-#include "mainMenu.h"
+#include "globalSettings.hpp"
+#include "mainMenu.hpp"
 #include <vector>
 #include <iostream>
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "globalFunc.h"
+#include "globalFunc.hpp"
 
 extern ScreenPosition windowSize;
 extern bool globalShutoff;

@@ -1,6 +1,6 @@
-#include "topMenu.h"
-#include "globalFunc.h"
-#include "globalSettings.h"
+#include "topMenu.hpp"
+#include "globalFunc.hpp"
+#include "globalSettings.hpp"
 #include "raylib.h"
 #include <fstream>
 #include <string>
