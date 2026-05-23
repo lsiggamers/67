@@ -26,15 +26,15 @@ install_deps() {
     case "$DISTRO" in
         fedora|rhel|centos)
             echo "Using dnf..."
-            sudo dnf install -y raylib raylib-devel gcc-c++
+            sudo dnf install -y gcc-c++
             ;;
         ubuntu|debian)
             echo "Using apt..."
-            sudo apt install -y libraylib-dev g++
+            sudo apt install -y g++
             ;;
         arch)
             echo "Using pacman..."
-            sudo pacman -Sy --noconfirm raylib gcc
+            sudo pacman -Sy --noconfirm gcc
             ;;
         *)
             echo "Unsupported distro: $DISTRO"
@@ -50,12 +50,6 @@ NEED_INSTALL=false
 # Check g++
 if ! command_exists g++; then
     echo "g++ not found"
-    NEED_INSTALL=true
-fi
-
-# Check raylib (basic check)
-if ! ldconfig -p | grep -q raylib; then
-    echo "raylib not found"
     NEED_INSTALL=true
 fi
 
