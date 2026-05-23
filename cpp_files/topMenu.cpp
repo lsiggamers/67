@@ -15,4 +15,3 @@ void topMenu() {
         DrawRightText(TextFormat("%d\%", capacity), windowSize.x - windowSize.x / 30,  windowSize.y / 30, windowSize.y / 40, BLACK);
     }
 }
-
