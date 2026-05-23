@@ -10,5 +10,9 @@ void topMenu() {
     int capacity;
     file >> capacity;
     file.close();
-    DrawRightText(TextFormat("%d\%", capacity), windowSize.x - windowSize.x / 30,  windowSize.y / 30, windowSize.y / 40, BLACK);
+    if (capacity < 0 || capacity > 100) {
+        DrawRightText("Connected", windowSize.x - windowSize.x / 30,  windowSize.y / 30, windowSize.y / 40, BLACK);
+    } else {
+        DrawRightText(TextFormat("%d\%", capacity), windowSize.x - windowSize.x / 30,  windowSize.y / 30, windowSize.y / 40, BLACK);
+    }
 }
