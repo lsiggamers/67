@@ -103,7 +103,7 @@ void runSettingsApplication() {
     createSideMenu();
     createDisplayMenuOptions();
     quit = false;
-    while (!WindowShouldClose() && !quit) {
+    while (!WindowShouldClose() && !quit && !globalShutoff) {
         input();
         BeginDrawing();
         ClearBackground(WHITE);

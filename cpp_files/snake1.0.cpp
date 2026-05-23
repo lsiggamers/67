@@ -301,12 +301,12 @@ void runSnake() {
         }
     }
 
-    while (!quit && !WindowShouldClose()) {
+    while (!quit && !WindowShouldClose() && !globalShutoff) {
 
         reset();
         createApples();
 
-        while (!quit && !isDead && !WindowShouldClose()) {
+        while (!quit && !isDead && !WindowShouldClose() && !globalShutoff) {
 
             input();
             moveTimer += GetFrameTime();

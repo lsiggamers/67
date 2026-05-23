@@ -3,8 +3,11 @@
 #include "globalSettings.hpp"
 #include "mainMenu.hpp"
 #include "topMenu.hpp"
+
 #include "snake.hpp"
+#include "higherOrLower.hpp"
 #include "settingsApplications.hpp"
+
 #include <vector>
 
 std::vector<application> desktop;
@@ -14,6 +17,7 @@ static int cols, rows, vectorCycle, mouseX, mouseY, vectorPosition;
 
 static application snakeApplication(runSnake, "Snake");
 static application settingsApplication(runSettingsApplication, "Settings");
+static application higherOrLowerApplication(runHigherOrLower, "Higher or Lower");
 
 static void menuInput() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
@@ -52,6 +56,7 @@ void createApplications() {
 
     desktop.push_back(settingsApplication);
     desktop.push_back(snakeApplication);
+    desktop.push_back(higherOrLowerApplication);
 
     vectorCycle = 0;
     vectorPosition = 0;
