@@ -5,32 +5,30 @@
 #include <string>
 
 
-enum varType {
-    INT,
-    STR,
-    FLOAT,
-    DOUBLE,
-
-};
-
 class DropdownMenuItem {
     private:
     std::string name;
+    int value;
     public:
     std::string getName() {
         return name;
     }
 
+    int getValue() {
+        return value;
+    }
 
-    DropdownMenuItem(std::string itemName, auto itemValue) {
-
+    DropdownMenuItem(std::string itemName, int itemValue) {
+        name = itemName;
+        value = itemValue;
     }
 };
+
 
 class DropdownMenu {
     private:
     
-    void* modifyVariable;
+    int* modifyVariable;
 
     std::vector<DropdownMenuItem> menuOptions;
 
@@ -65,8 +63,8 @@ class DropdownMenu {
         DrawRectangleRoundedLines(rectanglePosition, 0.1f, 10, BLACK);
     }
 
-    DropdownMenu(void* modify, int x, int y) {
-        modifyVariable = modify;
+    DropdownMenu(int* modifyVariable, int x, int y) {
+        this->modifyVariable = modifyVariable;
         cornerPosition.x = x;
         cornerPosition.y = y;
         rectanglePosition.x = x;
