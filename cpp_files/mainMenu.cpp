@@ -2,7 +2,6 @@
 #include "globalFunc.hpp"
 #include "globalSettings.hpp"
 #include "mainMenu.hpp"
-#include "topMenu.hpp"
 
 #include "snake.hpp"
 #include "higherOrLower.hpp"
@@ -10,11 +9,10 @@
 
 #include <vector>
 
-std::vector<application> desktop;
-
 static bool closeProcedure;
 static int cols, rows, vectorCycle, mouseX, mouseY, vectorPosition;
 
+static application menuApplication(renderMainMenu, "Main Menu");
 static application snakeApplication(runSnake, "Snake");
 static application settingsApplication(runSettingsApplication, "Settings");
 static application higherOrLowerApplication(runHigherOrLower, "Higher or Lower");
@@ -35,6 +33,7 @@ static void menuInput() {
         }
     }
 
+    
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         mouseX = GetMouseX();
         mouseY = GetMouseY();
@@ -43,7 +42,7 @@ static void menuInput() {
                 (mouseX < desktop.at(i).applicationPosition.x + 200) &&
                 (mouseY > desktop.at(i).applicationPosition.y) &&
                 (mouseY < desktop.at(i).applicationPosition.y + 200)) {
-                desktop.at(i).open();
+                openApplication = i;
             }
         }
     }
@@ -54,6 +53,7 @@ void createApplications() {
     cols = windowSize.x / 220;
     rows = windowSize.y / 220;
 
+    desktop.push_back(menuApplication);
     desktop.push_back(settingsApplication);
     desktop.push_back(snakeApplication);
     desktop.push_back(higherOrLowerApplication);
@@ -96,18 +96,12 @@ static void renderDeskto() {
 
 
 void renderMainMenu() {
-    while (!WindowShouldClose() && !globalShutoff) {
-        menuInput();    
-        BeginDrawing();
-        ClearBackground(WHITE);
-        if (closeProcedure) {
-            DrawEllipseLines(windowSize.x / 2, windowSize.y / 2, windowSize.x / 5, windowSize.y / 5, BLACK);
-            DrawCenteredText("Are you sure you want to close (Y/N)", windowSize.x / 2, windowSize.y / 2, windowSize.y / 30, BLACK);
-            EndDrawing();
-            return;
-        }
-        renderDesktop();
-        topMenu();
-        EndDrawing();
+    menuInput();    
+    ClearBackground(WHITE);
+    if (closeProcedure) {
+        DrawEllipseLines(windowSize.x / 2, windowSize.y / 2, windowSize.x / 5, windowSize.y / 5, BLACK);
+        DrawCenteredText("Are you sure you want to close (Y/N)", windowSize.x / 2, windowSize.y / 2, windowSize.y / 30, BLACK);
+        return;
     }
+    renderDesktop();
 }

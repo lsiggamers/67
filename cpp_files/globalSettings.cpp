@@ -4,13 +4,17 @@
 #include <fstream>
 #include <iostream>
 
+std::vector<application> desktop;
+
+int openApplication;
+
 ScreenPosition windowSize;
 bool globalShutoff;
 
 static int resolutionSelection, width, height;
 static bool foundWidth, foundHeight;
 
-static void importMonitorSize() {
+void importApplauncherSettings() {
     std::string line;
     std::ifstream file("settings_files/appLauncherSettings");
     foundWidth = false;
@@ -59,8 +63,4 @@ static void importMonitorSize() {
         }
     }
     file.close();
-}
-
-void inportApplauncherSettings() {
-    importMonitorSize();
 }

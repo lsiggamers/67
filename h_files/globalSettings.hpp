@@ -1,7 +1,33 @@
 #pragma once
 #include "globalFunc.hpp"
 
+#include <functional>
+#include <string>
+
+class application {
+    private:
+    std::function<void()> applicationFunc;
+    
+    public:
+    std::string applicationName;
+
+    ScreenPosition applicationPosition;
+
+    void open() {
+        applicationFunc();
+    }
+
+    application() {};
+
+    application(std::function<void()> func, std::string name) {
+        applicationFunc = func;
+        applicationName = name;
+    }
+};
+
 extern ScreenPosition windowSize;
 extern bool globalShutoff;
+extern std::vector<application> desktop;
+extern int openApplication;
 
-void inportApplauncherSettings();
+void importApplauncherSettings();

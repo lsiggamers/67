@@ -2,12 +2,10 @@
 #include "raylib.h"
 #include "globalSettings.hpp"
 #include "globalFunc.hpp"
-#include "topMenu.hpp"
 #include <string>
 #include <vector>
 
 static int openWindow, sideMenuItemWidth, mouseX, mouseY;
-static bool quit;
 
 class sideMenuItem {
     private:
@@ -54,7 +52,7 @@ static void input() {
         }
     }
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
-        quit = true;
+        openApplication = 0;
     }
 }
 
@@ -102,19 +100,13 @@ static void renderOtherMenu() {
 void runSettingsApplication() {
     createSideMenu();
     createDisplayMenuOptions();
-    quit = false;
-    while (!WindowShouldClose() && !quit && !globalShutoff) {
-        input();
-        BeginDrawing();
-        ClearBackground(WHITE);
-        switch (openWindow) {
-            case 0: renderDisplayMenu(); break;
-            case 1: renderOtherMenu(); break;
-            default: renderMainMenu(); break;
-        }
-        renderSideMenu();
-        topMenu();
-        EndDrawing();
+    input();
+    ClearBackground(WHITE);
+    switch (openWindow) {
+        case 0: renderDisplayMenu(); break;
+        case 1: renderOtherMenu(); break;
+        default: renderMainMenu(); break;
     }
+    renderSideMenu();
     sideMenu.clear();
 }

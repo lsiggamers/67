@@ -32,8 +32,9 @@ class Square {
 static Vector2 headPosition;
 static Vector2 lastHeadPosition;
 static const int gridPixelSize = 50;
+static bool firstLaunch = true;
 static int moveDirection, lastDirection, cols, rows, snakeLength, appleAmount, currentApples, highScore;
-static bool isDead, isPaused, escape, quit, foundHighScore;
+static bool isDead, isPaused, escape, foundHighScore;
 static float moveTimer = 0.0f;
 static float moveDelay; 
 static std::vector<std::vector<Square>> grid;
@@ -57,7 +58,7 @@ static void input() {
         if (IsKeyDown(KEY_TWO)) {appleAmount = 5;}
         if (IsKeyDown(KEY_THREE)) {appleAmount = 10;}
         if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
-            quit = true;
+            openApplication = 0;
         }
     }
 }
@@ -284,49 +285,44 @@ static void reset() {
     grid[rows / 2][cols / 2].head = true;
     grid[rows / 2][cols / 2 - 1].body = true; grid[rows / 2][cols / 2 - 1].snakePosition = 1;
     grid[rows / 2][cols / 2 - 2].body = true; grid[rows / 2][cols / 2 - 2].snakePosition = 2;
+
+    createApples();
 }
 
 
 void runSnake() {
-    quit = false;
-    importSettings();
-    cols = windowSize.x / gridPixelSize;
-    rows = windowSize.y / gridPixelSize;
+    if (firstLaunch) {
+        importSettings();
+        cols = windowSize.x / gridPixelSize;
+        rows = windowSize.y / gridPixelSize;
 
-    grid.resize(rows, std::vector<Square>(cols));
+        grid.resize(rows, std::vector<Square>(cols));
 
-    for (int y = 0; y < rows; y++) {
-        for (int x = 0; x < cols; x++) {
-            grid[y][x].position = {(float)(x * gridPixelSize), (float)(y * gridPixelSize)};
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                grid[y][x].position = {(float)(x * gridPixelSize), (float)(y * gridPixelSize)};
+            }
         }
+        firstLaunch = false;
     }
 
-    while (!quit && !WindowShouldClose() && !globalShutoff) {
+    input();
 
-        reset();
+    moveTimer += GetFrameTime();
+
+    if (moveTimer >= moveDelay && !escape) {
+        moveSnake();
         createApples();
+        moveTimer = 0.0f;
+    } else if (escape) {
+        renderEscapeMenu();
+    } else if (!escape && !isDead) {
+        initGrid();
+        renderGridSquares();
+    }
 
-        while (!quit && !isDead && !WindowShouldClose() && !globalShutoff) {
-
-            input();
-            moveTimer += GetFrameTime();
-
-            if (moveTimer >= moveDelay && !escape) {
-                moveSnake();
-                createApples();
-                moveTimer = 0.0f;
-            }
-
-            BeginDrawing();
-            if (escape) {
-                renderEscapeMenu();
-            } else if (!escape && !isDead) {
-                initGrid();
-                    renderGridSquares();
-            }
-            EndDrawing();
-        }
+    if (isDead) {
+        reset();
     }
     updateHighScore();
-    return;
 }
