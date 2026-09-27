@@ -11,6 +11,9 @@ int openApplication;
 ScreenPosition windowSize;
 bool globalShutoff;
 
+int batteryIconWidth = windowSize.x / 50;
+int batteryIconHeight = batteryIconWidth * 80 / 130;
+
 static int resolutionSelection, width, height;
 static bool foundWidth, foundHeight;
 

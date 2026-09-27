@@ -18,3 +18,5 @@ void DrawCenteredText(const char* text, int x, int y, int fontSize, Color color)
 void DrawRightText(const char* text, int x, int y, int fontSize, Color color);
 
 int randomInt(int min, int max);
+
+Image resizeAndUpload(Image& tmpImg, int newWidth, int newHeight);

@@ -23,3 +23,8 @@ int randomInt(int min, int max) {
     std::uniform_int_distribution<int> dist(min, max);
     return dist(gen);
 }
+
+Image resizeAndUpload(Image& tmpImg, int newWidth, int newHeight) {
+    ImageResize(&tmpImg, newWidth, newHeight);
+    return tmpImg;
+}
