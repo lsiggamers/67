@@ -83,9 +83,11 @@ fi
 echo "Compiling..."
 
 g++ cpp_files/*.cpp \
-    -o AppLauncher \
+    -o AppLauncher.exe \
     -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 \
     -Ih_files
 
 echo "Running..."
-./AppLauncher
+./AppLauncher.exe
+
+rm AppLauncher.exe
