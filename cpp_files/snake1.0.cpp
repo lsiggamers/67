@@ -213,7 +213,7 @@ static void renderGridSquares() {
 static void importSettings() {
     foundHighScore = false;
     std::string line;
-    std::ifstream file("settings_files/snakeSettings");
+    std::ifstream file("settings_files/snakeSettings.txtsettings");
 
     if (!file.is_open()) {
         file.close();
@@ -228,7 +228,7 @@ static void importSettings() {
     }
 
     if (!foundHighScore) {
-        std::ofstream file("settings_files/snakeSettings", std::ios::app);
+        std::ofstream file("settings_files/snakeSettings.txtsettings", std::ios::app);
         if (!file.is_open()) {
             file.close();
         } else {
@@ -240,7 +240,7 @@ static void importSettings() {
 
 
 static void updateHighScore() {
-    std::ifstream inFile("settings_files/snakeSettings");
+    std::ifstream inFile("settings_files/snakeSettings.txtsettings");
     std::vector<std::string> lines;
     std::string line;
 
@@ -258,7 +258,7 @@ static void updateHighScore() {
     }
     inFile.close();
 
-    std::ofstream outFile("settings_files/snakeSettings", std::ios::trunc);
+    std::ofstream outFile("settings_files/snakeSettings.txtsettings", std::ios::trunc);
     for (const auto& l : lines) {
         outFile << l << "\n";
     }
