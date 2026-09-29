@@ -1,6 +1,7 @@
 # mine
 *.txtsettings
 #.exe
+raylib.h
 
 
 
