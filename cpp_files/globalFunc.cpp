@@ -13,7 +13,7 @@ void DrawCenteredText(const char* text, int x, int y, int fontSize, Color color)
 void DrawRightText(const char* text, int x, int y, int fontSize, Color color) {
     int textWidth = MeasureText(text, fontSize);
     x = x - textWidth;
-    y = y - fontSize;
+    //y = y - fontSize;
     DrawText(text, x, y, fontSize, color);
 }
 

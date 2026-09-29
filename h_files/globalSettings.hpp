@@ -29,7 +29,5 @@ extern ScreenPosition windowSize;
 extern bool globalShutoff;
 extern std::vector<application> desktop;
 extern int openApplication;
-extern int batteryIconWidth;
-extern int batteryIconHeight;
 
 void importApplauncherSettings();
