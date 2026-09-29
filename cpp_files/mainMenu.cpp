@@ -5,6 +5,7 @@
 
 #include "snake.hpp"
 #include "settingsApplications.hpp"
+#include "visualAid.hpp"
 
 #include <vector>
 
@@ -14,6 +15,7 @@ static int cols, rows, vectorCycle, mouseX, mouseY, vectorPosition;
 static application menuApplication(renderMainMenu, "Main Menu");
 static application snakeApplication(runSnake, "Snake");
 static application settingsApplication(runSettingsApplication, "Settings");
+static application visualAidApplication(runVisualAidApplication, "Visual Aid");
 
 static void menuInput() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
@@ -54,6 +56,7 @@ void createApplications() {
     desktop.push_back(menuApplication);
     desktop.push_back(settingsApplication);
     desktop.push_back(snakeApplication);
+    desktop.push_back(visualAidApplication);
 
     vectorCycle = 0;
     vectorPosition = 0;

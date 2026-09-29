@@ -22,12 +22,12 @@ void loadBatteryTextures() {
     Image batteryImg25 =  LoadImage("assets/batteryIcons/battery25.png");
     Image batteryImg0 =   LoadImage("assets/batteryIcons/battery0.png");
 
-    Texture2D desktopTexture =    LoadTextureFromImage(resizeAndUpload(desktopImg,    batteryIconWidth, batteryIconHeight));
-    Texture2D batteryTexture100 = LoadTextureFromImage(resizeAndUpload(batteryImg100, batteryIconWidth, batteryIconHeight));
-    Texture2D batteryTexture75 =  LoadTextureFromImage(resizeAndUpload(batteryImg75,  batteryIconWidth, batteryIconHeight));
-    Texture2D batteryTexture50 =  LoadTextureFromImage(resizeAndUpload(batteryImg50,  batteryIconWidth, batteryIconHeight));
-    Texture2D batteryTexture25 =  LoadTextureFromImage(resizeAndUpload(batteryImg25,  batteryIconWidth, batteryIconHeight));
-    Texture2D batteryTexture0 =   LoadTextureFromImage(resizeAndUpload(batteryImg0,   batteryIconWidth, batteryIconHeight));
+    Texture2D desktopTexture =    LoadTextureFromImage(ImageResizeReturn(desktopImg,    batteryIconWidth, batteryIconHeight));
+    Texture2D batteryTexture100 = LoadTextureFromImage(ImageResizeReturn(batteryImg100, batteryIconWidth, batteryIconHeight));
+    Texture2D batteryTexture75 =  LoadTextureFromImage(ImageResizeReturn(batteryImg75,  batteryIconWidth, batteryIconHeight));
+    Texture2D batteryTexture50 =  LoadTextureFromImage(ImageResizeReturn(batteryImg50,  batteryIconWidth, batteryIconHeight));
+    Texture2D batteryTexture25 =  LoadTextureFromImage(ImageResizeReturn(batteryImg25,  batteryIconWidth, batteryIconHeight));
+    Texture2D batteryTexture0 =   LoadTextureFromImage(ImageResizeReturn(batteryImg0,   batteryIconWidth, batteryIconHeight));
 
     batteryTextures.clear();
     batteryTextures.push_back(desktopTexture);

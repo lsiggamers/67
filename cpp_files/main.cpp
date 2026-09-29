@@ -2,6 +2,7 @@
 #include "globalSettings.hpp"
 #include "mainMenu.hpp"
 #include "topMenu.hpp"
+#include "visualAid.hpp"
 #include "batteryMenu.hpp"
 #include <vector>
 #include <iostream>
@@ -16,6 +17,7 @@ int main() {
     // Load applications and textures
     createApplications();
     loadBatteryTextures();
+    loadVisualAidTextures();
 
     // Main loop
     while (!WindowShouldClose() && IsWindowReady() && !globalShutoff) {
@@ -27,6 +29,7 @@ int main() {
 
     // Unload textures and close window
     unloadBatteryTextures();
+    unloadVisualAidTextures();
 
     CloseWindow();
 }

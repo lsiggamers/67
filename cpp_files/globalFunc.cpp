@@ -24,7 +24,7 @@ int randomInt(int min, int max) {
     return dist(gen);
 }
 
-Image resizeAndUpload(Image& tmpImg, int newWidth, int newHeight) {
+Image ImageResizeReturn(Image& tmpImg, int newWidth, int newHeight) {
     ImageResize(&tmpImg, newWidth, newHeight);
     return tmpImg;
 }
