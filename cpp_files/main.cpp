@@ -1,21 +1,10 @@
 #include "raylib.h"
 #include "globalSettings.hpp"
-#include "mainMenu.hpp"
-#include "topMenu.hpp"
-#include "visualAid.hpp"
 #include "batteryMenu.hpp"
-#include <atomic>
+#include "textureLoading.hpp"
+#include "topMenu.hpp"
+
 #include <thread>
-
-std::atomic<bool> loaded(false);
-
-static void textureLoading() {
-    // Load applications and textures
-    createApplications();
-    loadBatteryTextures();
-    loadVisualAidTextures();
-    loaded = true;
-}
 
 int main() {
     openApplication = 0;
@@ -58,9 +47,33 @@ int main() {
         EndDrawing();
     }
 
-    // Unload textures and close window
-    unloadBatteryTextures();
-    unloadVisualAidTextures();
+
+    // Unloading screen
+    std::thread textureUnloadingThread(textureUnloading);
+    while (!unloaded) {
+        BeginDrawing();
+        ClearBackground(primaryColor);
+        DrawCenteredText("Unloading.", windowSize.x / 2, windowSize.y / 2, 30, secondaryColor);
+        EndDrawing();
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        if (!unloaded) {
+            BeginDrawing();
+            ClearBackground(primaryColor);
+            DrawCenteredText("Unloading..", windowSize.x / 2, windowSize.y / 2, 30, secondaryColor);
+            EndDrawing();
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        }
+        if (!unloaded) {
+            BeginDrawing();
+            ClearBackground(primaryColor);
+            DrawCenteredText("Unloading...", windowSize.x / 2, windowSize.y / 2, 30, secondaryColor);
+            EndDrawing();
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        }
+    }
+
+    // Signal that unloading is complete and close the unloading thread
+    textureUnloadingThread.join();
 
     CloseWindow();
 }
