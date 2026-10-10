@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "globalSettings.hpp"
 #include "globalFunc.hpp"
+
 #include <string>
 #include <vector>
 
@@ -32,7 +33,7 @@ class sideMenuItem {
     }
 };
 
-std::vector<sideMenuItem> sideMenu;
+static std::vector<sideMenuItem> sideMenu;
 static sideMenuItem displayMenu(0, "Display");
 static sideMenuItem otherMenu(1, "Other");
 
@@ -102,7 +103,7 @@ void runSettingsApplication() {
     if (firstLaunch) {
         createSideMenu();
         createDisplayMenuOptions();
-        firstLaunch = false;
+        //firstLaunch = false;
     }
     input();
     ClearBackground(WHITE);
@@ -112,5 +113,4 @@ void runSettingsApplication() {
         default: renderMainMenu(); break;
     }
     renderSideMenu();
-    sideMenu.clear();
 }
