@@ -1,5 +1,6 @@
 #pragma once
 #include "globalFunc.hpp"
+#include "globalSettings.hpp"
 #include "raylib.h"
 #include <vector>
 #include <string>
@@ -60,7 +61,7 @@ class DropdownMenu {
     }
 
     void draw(int x, int y, int fontSize, Color color) {
-        DrawRectangleRoundedLines(rectanglePosition, 0.1f, 10, BLACK);
+        DrawRectangleRoundedLines(rectanglePosition, 0.1f, 10, secondaryColor);
     }
 
     DropdownMenu(int* modifyVariable, int x, int y) {

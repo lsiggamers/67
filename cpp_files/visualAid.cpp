@@ -73,8 +73,8 @@ static void drawBackground() {
 
 static void input() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
-            openApplication = 0;
-            return;
+        openApplication = 0;
+        return;
     }
     if (IsKeyPressed(KEY_F1)) {
         debugMenuActive = !debugMenuActive;

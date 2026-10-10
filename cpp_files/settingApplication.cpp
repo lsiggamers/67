@@ -6,6 +6,7 @@
 #include <vector>
 
 static int openWindow, sideMenuItemWidth, mouseX, mouseY;
+static bool firstLaunch = true;
 
 class sideMenuItem {
     private:
@@ -98,8 +99,11 @@ static void renderOtherMenu() {
 
 
 void runSettingsApplication() {
-    createSideMenu();
-    createDisplayMenuOptions();
+    if (firstLaunch) {
+        createSideMenu();
+        createDisplayMenuOptions();
+        firstLaunch = false;
+    }
     input();
     ClearBackground(WHITE);
     switch (openWindow) {

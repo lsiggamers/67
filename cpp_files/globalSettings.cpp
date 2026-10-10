@@ -8,7 +8,7 @@ std::vector<application> desktop;
 int openApplication;
 
 ScreenPosition windowSize;
-bool globalShutoff;
+bool globalShutoff, developerMode, restart;
 Color primaryColor = { 255, 255, 255, 255 };
 Color secondaryColor = { 0, 0, 0, 255 };
 

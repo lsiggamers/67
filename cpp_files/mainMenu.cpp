@@ -18,10 +18,13 @@ static application settingsApplication(runSettingsApplication, "Settings");
 static application visualAidApplication(runVisualAidApplication, "Visual Aid");
 
 static void menuInput() {
-    if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
+    if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C) && !IsKeyDown(KEY_LEFT_SHIFT)) {
         if (!closeProcedure) {
             closeProcedure = true;
         }
+    } else if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C) && IsKeyDown(KEY_LEFT_SHIFT)) {
+        globalShutoff = true;
+        restart = true;
     }
 
     if (closeProcedure) {

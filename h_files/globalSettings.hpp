@@ -26,7 +26,7 @@ class application {
 };
 
 extern ScreenPosition windowSize;
-extern bool globalShutoff;
+extern bool globalShutoff, developerMode, restart;
 extern std::vector<application> desktop;
 extern int openApplication;
 extern Color primaryColor;
