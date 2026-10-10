@@ -5,11 +5,13 @@
 #include <iostream>
 
 std::vector<application> desktop;
-
 int openApplication;
 
 ScreenPosition windowSize;
 bool globalShutoff;
+Color primaryColor = { 255, 255, 255, 255 };
+Color secondaryColor = { 0, 0, 0, 255 };
+
 
 static int resolutionSelection, width, height;
 static bool foundWidth, foundHeight;

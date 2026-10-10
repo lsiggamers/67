@@ -29,5 +29,7 @@ extern ScreenPosition windowSize;
 extern bool globalShutoff;
 extern std::vector<application> desktop;
 extern int openApplication;
+extern Color primaryColor;
+extern Color secondaryColor;
 
 void importApplauncherSettings();
