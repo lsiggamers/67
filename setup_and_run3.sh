@@ -82,7 +82,7 @@ fi
 
 echo "Compiling..."
 
-g++ cpp_files/*.cpp \
+g++ $(find cpp_files -type f -name "*.cpp") \
     -o AppLauncher.exe \
     -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 \
     -Ih_files

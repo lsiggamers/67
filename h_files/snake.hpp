@@ -1,3 +1,3 @@
 #pragma once
 
-void runSnake();
+void runSnakeApplication();

@@ -14,13 +14,7 @@ int main() {
     InitWindow(windowSize.x, windowSize.y, "AppLauncher");
     SetExitKey(0);
 
-    // loading screen
-    BeginDrawing();
-    ClearBackground(primaryColor);
-    DrawCenteredText("Loading...", windowSize.x / 2, windowSize.y / 2, 30, secondaryColor);
-    EndDrawing();
-
-    // Loading textures
+    // Loading textures and applications
     textureLoading();
 
     while (!IsWindowReady()) {

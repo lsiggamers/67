@@ -2,6 +2,8 @@
 #include "globalFunc.hpp"
 #include "globalSettings.hpp"
 #include "mainMenu.hpp"
+#include "batteryMenu.hpp"
+#include "textureLoading.hpp"
 
 #include "snake.hpp"
 #include "settingsApplications.hpp"
@@ -13,7 +15,7 @@ static bool closeProcedure;
 static int cols, rows, vectorCycle, mouseX, mouseY, vectorPosition;
 
 static application menuApplication(renderMainMenu, "Main Menu");
-static application snakeApplication(runSnake, "Snake");
+static application snakeApplication(runSnakeApplication, "Snake");
 static application settingsApplication(runSettingsApplication, "Settings");
 static application visualAidApplication(runVisualAidApplication, "Visual Aid");
 
@@ -56,10 +58,19 @@ void createApplications() {
     cols = windowSize.x / 220;
     rows = windowSize.y / 220;
 
+    // Add all applications to the desktop vector
     desktop.push_back(menuApplication);
     desktop.push_back(settingsApplication);
     desktop.push_back(snakeApplication);
     desktop.push_back(visualAidApplication);
+
+    // Add the texture loader for the list of application texture loaders
+    applicationTextureLoaders.push_back(loadBatteryTextures);
+    applicationTextureLoaders.push_back(loadVisualAidTextures);
+
+    // Add the texture unloader for the list of application texture unloaders
+    applicationTextureUnloaders.push_back(unloadVisualAidTextures);
+    applicationTextureUnloaders.push_back(unloadBatteryTextures);
 
     vectorCycle = 0;
     vectorPosition = 0;

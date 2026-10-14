@@ -290,7 +290,7 @@ static void reset() {
 }
 
 
-void runSnake() {
+void runSnakeApplication() {
     if (firstLaunch) {
         importSettings();
         cols = windowSize.x / gridPixelSize;

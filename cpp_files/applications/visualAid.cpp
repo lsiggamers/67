@@ -18,6 +18,7 @@ static ScreenPosition PlayerPosition(
     windowSize.y / 2
 );
 static bool debugMenuActive = false;
+static const std::filesystem::path imagesDir("assets/visualAid/backgroundimages");
 
 static std::vector<Texture2D> backgroundTextures;
 static Texture2D playerTexture;
@@ -33,9 +34,7 @@ void unloadVisualAidTextures() {
 void loadVisualAidTextures() {
     // Unload any previously loaded textures to avoid leaks
     unloadVisualAidTextures();
-    backgroundTextures.clear();
 
-    const std::filesystem::path imagesDir("assets/visualAid/backgroundimages");
     if (!std::filesystem::exists(imagesDir) || !std::filesystem::is_directory(imagesDir)) {
         return;
     }
