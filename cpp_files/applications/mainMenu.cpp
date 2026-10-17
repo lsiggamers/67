@@ -8,6 +8,7 @@
 #include "snake.hpp"
 #include "settingsApplications.hpp"
 #include "visualAid.hpp"
+#include "thing3d.hpp"
 
 #include <vector>
 
@@ -18,6 +19,7 @@ static application menuApplication(renderMainMenu, "Main Menu");
 static application snakeApplication(runSnakeApplication, "Snake");
 static application settingsApplication(runSettingsApplication, "Settings");
 static application visualAidApplication(runVisualAidApplication, "Visual Aid");
+static application thing3dApplication(runThing3dApplication, "3d Thing");
 
 static void menuInput() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C) && !IsKeyDown(KEY_LEFT_SHIFT)) {
@@ -63,6 +65,7 @@ void createApplications() {
     desktop.push_back(settingsApplication);
     desktop.push_back(snakeApplication);
     desktop.push_back(visualAidApplication);
+    desktop.push_back(thing3dApplication);
 
     // Add the texture loader for the list of application texture loaders
     applicationTextureLoaders.push_back(loadBatteryTextures);
