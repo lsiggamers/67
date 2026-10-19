@@ -1,8 +1,10 @@
 #pragma once
 #include "globalFunc.hpp"
+#include "raylib.h"
 
 #include <functional>
 #include <string>
+#include <vector>
 
 class application {
     private:

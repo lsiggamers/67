@@ -8,7 +8,7 @@
 #include <chrono>
 
 int main() {
-    developerMode = false;
+    developerMode = true;
     openApplication = 0;
     importApplauncherSettings();
     InitWindow(windowSize.x, windowSize.y, "AppLauncher");
