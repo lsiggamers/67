@@ -8,8 +8,8 @@
 #include <vector>
 #include <functional>
 
-std::vector<std::function<void()>> applicationTextureLoaders;
-std::vector<std::function<void()>> applicationTextureUnloaders;
+std::vector<std::function<void()>> systemTextureLoaders;
+std::vector<std::function<void()>> systemTextureUnloaders;
 
 void textureLoading() {
     // loading screen for applications
@@ -27,9 +27,16 @@ void textureLoading() {
     DrawCenteredText("Loading Application Textures...", windowSize.x / 2, windowSize.y / 2, 30, secondaryColor);
     EndDrawing();
 
-    // Load textures
-    for (const auto& loader : applicationTextureLoaders) {
+    // Load system textures
+    for (const auto& loader : systemTextureLoaders) {
         loader();
+    }
+
+    // Load application textures
+    for (auto& app : desktop) {
+        if (app.hasTextureLoader()) {
+            app.loadTexture();
+        }
     }
 }
 
@@ -39,7 +46,16 @@ void textureUnloading() {
     ClearBackground(primaryColor);
     DrawCenteredText("Unloading Application Textures...", windowSize.x / 2, windowSize.y / 2, 30, secondaryColor);
     EndDrawing();
-    for (const auto& unloader : applicationTextureUnloaders) {
+
+    // Unload system textures
+    for (const auto& unloader : systemTextureUnloaders) {
         unloader();
+    }
+
+    // Unload application textures
+    for (auto& app : desktop) {
+        if (app.hasTextureUnloader()) {
+            app.unloadTexture();
+        }
     }
 }

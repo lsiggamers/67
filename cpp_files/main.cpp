@@ -32,12 +32,6 @@ int main() {
         }
         EndDrawing();
     }
-
-    // Unloading screen
-    BeginDrawing();
-    ClearBackground(primaryColor);
-    DrawCenteredText("Unloading...", windowSize.x / 2, windowSize.y / 2, 30, secondaryColor);
-    EndDrawing();
     
     // Unloading textures
     textureUnloading();

@@ -19,7 +19,7 @@ static int cols, rows, vectorCycle, mouseX, mouseY, vectorPosition;
 static application menuApplication(renderMainMenu, "Main Menu");
 static application snakeApplication(runSnakeApplication, "Snake");
 static application settingsApplication(runSettingsApplication, "Settings");
-static application visualAidApplication(runVisualAidApplication, "Visual Aid");
+static application visualAidApplication(runVisualAidApplication, "Visual Aid", loadVisualAidTextures, unloadVisualAidTextures);
 static application thing3dApplication(runThing3dApplication, "3d Thing");
 static application drawingApplication(runDrawingApplication, "Drawing");
 
@@ -70,13 +70,11 @@ void createApplications() {
     desktop.push_back(thing3dApplication);
     desktop.push_back(drawingApplication);
 
-    // Add the texture loader for the list of application texture loaders
-    applicationTextureLoaders.push_back(loadBatteryTextures);
-    applicationTextureLoaders.push_back(loadVisualAidTextures);
+    // Add the texture loader for system programs to the list, not application programs, as they are added in their respective application files
+    systemTextureLoaders.push_back(loadBatteryTextures);
 
     // Add the texture unloader for the list of application texture unloaders
-    applicationTextureUnloaders.push_back(unloadVisualAidTextures);
-    applicationTextureUnloaders.push_back(unloadBatteryTextures);
+    systemTextureUnloaders.push_back(unloadBatteryTextures);
 
     vectorCycle = 0;
     vectorPosition = 0;
@@ -100,7 +98,7 @@ static void renderDesktop() {
     }
 }
 
-
+// Not used
 static void renderDeskto() {
     vectorCycle = 0;
     for (int y = 0; y < rows - 2; y++) {
