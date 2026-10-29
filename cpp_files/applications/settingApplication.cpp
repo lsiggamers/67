@@ -103,7 +103,7 @@ void runSettingsApplication() {
     if (firstLaunch) {
         createSideMenu();
         createDisplayMenuOptions();
-        //firstLaunch = false;
+        firstLaunch = false;
     }
     input();
     ClearBackground(WHITE);

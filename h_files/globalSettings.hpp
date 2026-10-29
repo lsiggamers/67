@@ -58,4 +58,6 @@ extern int openApplication;
 extern Color primaryColor;
 extern Color secondaryColor;
 
+extern int testInt;
+
 void importApplauncherSettings();

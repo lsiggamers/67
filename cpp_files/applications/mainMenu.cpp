@@ -23,6 +23,7 @@ static application visualAidApplication(runVisualAidApplication, "Visual Aid", l
 static application thing3dApplication(runThing3dApplication, "3d Thing");
 static application drawingApplication(runDrawingApplication, "Drawing");
 
+
 static void menuInput() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C) && !IsKeyDown(KEY_LEFT_SHIFT)) {
         if (!closeProcedure) {
@@ -59,8 +60,9 @@ static void menuInput() {
 
 
 void createApplications() {
-    cols = windowSize.x / 220;
-    rows = windowSize.y / 220;
+    // Cells are 220x220; leave a 10px margin while keeping the full cell onscreen.
+    cols = windowSize.x >= 210 ? (windowSize.x - 10) / 220 + 1 : 0;
+    rows = windowSize.y >= 210 ? (windowSize.y - 10) / 220 + 1 : 0;
 
     // Add all applications to the desktop vector
     desktop.push_back(menuApplication);
@@ -76,14 +78,13 @@ void createApplications() {
     // Add the texture unloader for the list of application texture unloaders
     systemTextureUnloaders.push_back(unloadBatteryTextures);
 
+
     vectorCycle = 0;
     vectorPosition = 0;
-    for (int y = 0; y < rows - 2; y++) {
-        for (int x = 0; x < cols; x++) {
-            if (desktop.size() > vectorCycle) {
-                desktop.at(vectorPosition).applicationPosition.x = x * 220 + 10;
-                desktop.at(vectorPosition).applicationPosition.y = y * 220 + 10;
-            }
+    for (int y = 0; y < rows && vectorCycle < desktop.size(); y++) {
+        for (int x = 0; x < cols && vectorCycle < desktop.size(); x++) {
+            desktop.at(vectorPosition).applicationPosition.x = x * 220;
+            desktop.at(vectorPosition).applicationPosition.y = y * 220;
             vectorCycle++;
             vectorPosition++;
         }
@@ -95,20 +96,6 @@ static void renderDesktop() {
     for (int i = 0; i < desktop.size(); i++) {
         DrawRectangle(desktop.at(i).applicationPosition.x + 10, desktop.at(i).applicationPosition.y + 10, 200, 200, BLACK);
         DrawCenteredText(TextFormat("%s", desktop.at(i).applicationName.c_str()), desktop.at(i).applicationPosition.x + 110, desktop.at(i).applicationPosition.y + 110, 30, WHITE);
-    }
-}
-
-// Not used
-static void renderDeskto() {
-    vectorCycle = 0;
-    for (int y = 0; y < rows - 2; y++) {
-        for (int x = 0; x < cols; x++) {
-            if (desktop.size() > vectorCycle) {
-                DrawRectangle(x * 220 + 10, y * 220 + 10, 200, 200, BLACK);
-                DrawCenteredText(TextFormat("%s", desktop.at(vectorCycle).applicationName.c_str()), x * 220 + 110, y * 220 + 110, 30, WHITE);
-            }
-            vectorCycle++;
-        }
     }
 }
 
