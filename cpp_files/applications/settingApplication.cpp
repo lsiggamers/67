@@ -2,9 +2,13 @@
 #include "raylib.h"
 #include "globalSettings.hpp"
 #include "globalFunc.hpp"
+#include "dropDown.hpp"
 
 #include <string>
 #include <vector>
+#include <iostream>
+
+static int test;
 
 static int openWindow, sideMenuItemWidth, mouseX, mouseY;
 static bool firstLaunch = true;
@@ -37,6 +41,10 @@ static std::vector<sideMenuItem> sideMenu;
 static sideMenuItem displayMenu(0, "Display");
 static sideMenuItem otherMenu(1, "Other");
 
+static DropdownMenu<int> displayMenuOptions(&test);
+static DropdownMenuItem<int> displayOption1("Option1", 1);
+static DropdownMenuItem<int> displayOption2("Option 2", 2);
+
 static void input() {
     switch (openWindow) {
         case 1:
@@ -60,7 +68,8 @@ static void input() {
 
 
 static void createDisplayMenuOptions() {
-
+    displayMenuOptions.appendOption(displayOption1);
+    displayMenuOptions.appendOption(displayOption2);
 }
 
 
@@ -91,6 +100,7 @@ static void renderMainMenu() {
 
 static void renderDisplayMenu() {
     DrawCenteredText("Welcome to the displaysettings menu", windowSize.x / 2, windowSize.y / 2, 40, BLACK);
+    displayMenuOptions.draw(windowSize.x / 2, windowSize.y / 2, windowSize.y / 50, BLACK);
 }
 
 
@@ -113,4 +123,5 @@ void runSettingsApplication() {
         default: renderMainMenu(); break;
     }
     renderSideMenu();
+    std::cout << "Test: " << test << std::endl;
 }

@@ -2,6 +2,8 @@
 
 void loadBatteryTextures();
 
-void batteryMenu();
+void batteryMeasure();
+
+void drawBatteryMenu();
 
 void unloadBatteryTextures();

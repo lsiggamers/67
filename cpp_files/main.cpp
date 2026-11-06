@@ -17,6 +17,9 @@ int main() {
     // Loading textures and applications
     textureLoading();
 
+    // Starting a thread to mesure battery status
+    std::thread batteryThread(batteryMeasure);
+
     while (!IsWindowReady()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
@@ -35,6 +38,9 @@ int main() {
     
     // Unloading textures
     textureUnloading();
+
+    // Waiting for the battery thread to finish
+    batteryThread.join();
 
     CloseWindow();
     if (restart) {

@@ -3,16 +3,21 @@
 #include "globalFunc.hpp"
 #include "globalSettings.hpp"
 #include "topMenu.hpp"
+
 #include <fstream>
 #include <filesystem>
 #include <vector>
 #include <iostream>
+#include <thread>
 
-std::vector<Texture2D> batteryTextures;
+static bool charging, batteryPresent;
+static int capacity;
 
-int batteryIconWidth;
-int batteryIconHeight;
-int chargingIconWidth;
+static std::vector<Texture2D> batteryTextures;
+
+static int batteryIconWidth;
+static int batteryIconHeight;
+static int chargingIconWidth;
 
 void loadBatteryTextures() {
     batteryIconHeight = windowSize.y / 40;
@@ -52,32 +57,55 @@ void loadBatteryTextures() {
     UnloadImage(chargingImg);
 }
 
-void batteryMenu() {
-    if (std::filesystem::exists("/sys/class/power_supply/BAT0/capacity")) {
-        std::ifstream file(     "/sys/class/power_supply/BAT0/capacity");
-        int capacity;
-        file >> capacity;
-        file.close();
-        if (capacity >= 90) {
-            DrawTexture(batteryTextures[1], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
-        } else if (capacity >= 70) {
-            DrawTexture(batteryTextures[2], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
-        } else if (capacity >= 45) {
-            DrawTexture(batteryTextures[3], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
-        } else if (capacity >= 20) {
-            DrawTexture(batteryTextures[4], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
+void batteryMeasure() {
+    while (!globalShutoff) {
+        if (std::filesystem::exists("/sys/class/power_supply/BAT0/status")) {
+            std::ifstream file("/sys/class/power_supply/BAT0/status");
+            std::string status;
+            file >> status;
+            charging = (status == "Charging");
+            batteryPresent = true;
+            file.close();
         } else {
-            DrawTexture(batteryTextures[5], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
+            batteryPresent = false;
         }
-        topMenuSpot += batteryIconWidth + 5;
 
-        DrawRightText(TextFormat("%d\%", capacity), windowSize.x - topMenuSpot, 5, windowSize.y / 40, BLACK);
-        topMenuSpot += MeasureText(TextFormat("%d\%", capacity), windowSize.x / 40);
+        if (batteryPresent && std::filesystem::exists("/sys/class/power_supply/BAT0/capacity")) {
+            std::ifstream file("/sys/class/power_supply/BAT0/capacity");
+            file >> capacity;
+            file.close();
+        }
+
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        if (globalShutoff) {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+}
+
+void drawBatteryMenu() {
+    if (!batteryPresent) {
+        DrawTexture(batteryTextures[0], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
+    } else if (capacity >= 90) {
+        DrawTexture(batteryTextures[1], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
+    } else if (capacity >= 70) {
+        DrawTexture(batteryTextures[2], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
+    } else if (capacity >= 45) {
+        DrawTexture(batteryTextures[3], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
+    } else if (capacity >= 20) {
+        DrawTexture(batteryTextures[4], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
     } else {
-        DrawTexture(    batteryTextures[0], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
-        topMenuSpot += batteryIconWidth + 5;
-        DrawRightText("Desktop",                    windowSize.x - topMenuSpot, 5, windowSize.y / 40, BLACK);
-        topMenuSpot += MeasureText("Desktop", windowSize.x / 40);
+        DrawTexture(batteryTextures[5], windowSize.x - topMenuSpot - batteryIconWidth, 5, WHITE);
+    }
+    topMenuSpot += batteryIconWidth + topMenuPadding;
+
+    if (batteryPresent) {
+        DrawRightText(TextFormat("%d\%", capacity), windowSize.x - topMenuSpot, 5, windowSize.y / 40, BLACK);
+        topMenuSpot += MeasureText(TextFormat("%d\%", capacity), windowSize.x / 40) + topMenuPadding;
+    } else {
+        DrawRightText("Desktop", windowSize.x - topMenuSpot, 5, windowSize.y / 40, BLACK);
+        topMenuSpot += MeasureText("Desktop", windowSize.x / 40) + topMenuPadding;
     }
 }
 

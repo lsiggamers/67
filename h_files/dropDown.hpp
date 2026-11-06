@@ -126,9 +126,8 @@ class DropdownMenu {
         }
     }
 
-    DropdownMenu(T* modifyVariable, int x, int y)
-        : modifyVariable(modifyVariable), isOpen(false), fontSize(16) {
-        rectanglePosition = {static_cast<float>(x), static_cast<float>(y), 0, 0};
+    DropdownMenu(T* modifyVariable, int fontSize = 16)
+        : modifyVariable(modifyVariable), isOpen(false), fontSize(fontSize) {
         rectangleResize();
     }
 };
