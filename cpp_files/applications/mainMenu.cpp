@@ -94,18 +94,18 @@ void createApplications() {
 
 static void renderDesktop() {
     for (int i = 0; i < desktop.size(); i++) {
-        DrawRectangle(desktop.at(i).applicationPosition.x + 10, desktop.at(i).applicationPosition.y + 10, 200, 200, BLACK);
-        DrawCenteredText(TextFormat("%s", desktop.at(i).applicationName.c_str()), desktop.at(i).applicationPosition.x + 110, desktop.at(i).applicationPosition.y + 110, 30, WHITE);
+        DrawRectangle(desktop.at(i).applicationPosition.x + 10, desktop.at(i).applicationPosition.y + 10, 200, 200, secondaryColor);
+        DrawCenteredText(TextFormat("%s", desktop.at(i).applicationName.c_str()), desktop.at(i).applicationPosition.x + 110, desktop.at(i).applicationPosition.y + 110, 30, primaryColor);
     }
 }
 
 
 void renderMainMenu() {
     menuInput();    
-    ClearBackground(WHITE);
+    ClearBackground(primaryColor);
     if (closeProcedure) {
-        DrawEllipseLines(windowSize.x / 2, windowSize.y / 2, windowSize.x / 5, windowSize.y / 5, BLACK);
-        DrawCenteredText("Are you sure you want to close (Y/N)", windowSize.x / 2, windowSize.y / 2, windowSize.y / 30, BLACK);
+        DrawEllipseLines(windowSize.x / 2, windowSize.y / 2, windowSize.x / 5, windowSize.y / 5, secondaryColor);
+        DrawCenteredText("Are you sure you want to close (Y/N)", windowSize.x / 2, windowSize.y / 2, windowSize.y / 30, secondaryColor);
         return;
     }
     renderDesktop();

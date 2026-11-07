@@ -1,6 +1,5 @@
 # mine
-*.txtsettings
-#.exe
+settings_files/*.json
 raylib.h
 
 

@@ -28,6 +28,7 @@ install_deps() {
             sudo dnf install -y \
                 gcc-c++ \
                 raylib-devel \
+                nlohmann-json-devel \
                 mesa-libGL-devel \
                 libX11-devel
             ;;
@@ -38,6 +39,7 @@ install_deps() {
             sudo apt install -y \
                 g++ \
                 libraylib-dev \
+                nlohmann-json3-dev \
                 libgl1-mesa-dev \
                 libx11-dev
             ;;
@@ -47,6 +49,7 @@ install_deps() {
             sudo pacman -Sy --noconfirm \
                 gcc \
                 raylib \
+                nlohmann-json \
                 mesa \
                 libx11
             ;;
@@ -71,6 +74,12 @@ fi
 # Raylib check (important fix)
 if ! ldconfig -p 2>/dev/null | grep -q raylib; then
     echo "raylib not found"
+    NEED_INSTALL=true
+fi
+
+# nlohmann/json is header-only
+if ! printf '#include <nlohmann/json.hpp>\n' | g++ -x c++ -E - >/dev/null 2>&1; then
+    echo "nlohmann/json not found"
     NEED_INSTALL=true
 fi
 

@@ -4,6 +4,7 @@
 #include "globalSettings.hpp"
 #include <vector>
 #include <fstream>
+#include <nlohmann/json.hpp>
 
 class Square {
     public:
@@ -211,58 +212,28 @@ static void renderGridSquares() {
 
 
 static void importSettings() {
-    foundHighScore = false;
-    std::string line;
-    std::ifstream file("settings_files/snakeSettings.txtsettings");
-
-    if (!file.is_open()) {
-        file.close();
+    if (std::fstream("settings_files/snakeSettings.json").good()) {
+        std::ifstream inFile("settings_files/snakeSettings.json");
+        nlohmann::json settings;
+        inFile >> settings;
+        highScore = settings["highScore"];
+        inFile.close();
     } else {
-        while (std::getline(file, line)) {
-            if (line.find("highScore=") == 0) {
-                highScore = std::stoi(line.substr(10));
-                foundHighScore = true;
-            }
-        }
-        file.close();
+        std::ofstream outFile("settings_files/snakeSettings.json");
+        nlohmann::json settings;
+        settings["highScore"] = 0;
+        outFile << settings << std::endl;
+        outFile.close();
     }
-
-    if (!foundHighScore) {
-        std::ofstream file("settings_files/snakeSettings.txtsettings", std::ios::app);
-        if (!file.is_open()) {
-            file.close();
-        } else {
-            file << "highScore=0" << "\n";
-        }
-    }
-    file.close();
 }
 
 
 static void updateHighScore() {
-    std::ifstream inFile("settings_files/snakeSettings.txtsettings");
-    std::vector<std::string> lines;
-    std::string line;
-
-    if (!inFile.is_open()) {
-        inFile.close();
-        return;
-    }
-
-    while (std::getline(inFile, line)) {
-        if (line.rfind("highScore=", 0) == 0) {
-            // Replace the line
-            line = "highScore=" + std::to_string(highScore);
-        }
-        lines.push_back(line);
-    }
-    inFile.close();
-
-    std::ofstream outFile("settings_files/snakeSettings.txtsettings", std::ios::trunc);
-    for (const auto& l : lines) {
-        outFile << l << "\n";
-    }
-    return;
+    std::ofstream outFile("settings_files/snakeSettings.json");
+    nlohmann::json settings;
+    settings["highScore"] = highScore;
+    outFile << settings << std::endl;
+    outFile.close();
 }
 
 

@@ -123,5 +123,5 @@ void runSettingsApplication() {
         default: renderMainMenu(); break;
     }
     renderSideMenu();
-    std::cout << "Test: " << test << std::endl;
+    // std::cout << "Test: " << test << std::endl;
 }
