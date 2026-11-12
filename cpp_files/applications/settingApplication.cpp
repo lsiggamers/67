@@ -100,7 +100,7 @@ static void renderMainMenu() {
 
 static void renderDisplayMenu() {
     DrawCenteredText("Welcome to the displaysettings menu", windowSize.x / 2, windowSize.y / 2, 40, BLACK);
-    displayMenuOptions.draw(windowSize.x / 2, windowSize.y / 2, windowSize.y / 50, BLACK);
+    displayMenuOptions.draw(windowSize.x / 2, windowSize.y / 2, windowSize.y / 50, false, BLACK);
 }
 
 

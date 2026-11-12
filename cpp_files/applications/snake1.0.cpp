@@ -2,6 +2,7 @@
 #include "snake.hpp"
 #include "globalFunc.hpp"
 #include "globalSettings.hpp"
+#include "dropDown.hpp"
 #include <vector>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -40,6 +41,9 @@ static float moveTimer = 0.0f;
 static float moveDelay; 
 static std::vector<std::vector<Square>> grid;
 
+DropdownMenu<int> appleAmountMenu(&appleAmount);
+DropdownMenu<float> snakeSpeedMenu(&moveDelay);
+
 
 static void input() {
 
@@ -66,25 +70,23 @@ static void input() {
 
 
 static void renderEscapeMenu() {
-    ClearBackground(RAYWHITE);
-    DrawCenteredText("Press ESC to open game", windowSize.x / 2, windowSize.y / 2, 50, BLACK);
-    DrawCenteredText(TextFormat("Highscore: %d", highScore), windowSize.x / 2, windowSize.y / 2 + 60, 40, BLACK);
+    ClearBackground(primaryColor);
+    DrawCenteredText("Press ESC to open game", windowSize.x / 2, windowSize.y / 2, 50, secondaryColor);
+    DrawCenteredText(TextFormat("Highscore: %d", highScore), windowSize.x / 2, windowSize.y / 2 + 60, 40, secondaryColor);
+    
+    snakeSpeedMenu.draw(windowSize.x / 2 - 100, windowSize.y / 2 + 160, 16, false, secondaryColor);
+    appleAmountMenu.draw(windowSize.x / 2 - 100, windowSize.y / 2 + 120, 16, false, secondaryColor);
 
-    DrawText("Press 1 to set Apple amount to 1",  windowSize.x / 40, windowSize.y / 20,       25, BLACK);
-    DrawText("Press 2 to set Apple amount to 5",  windowSize.x / 40, windowSize.y / 20 + 40,  25, BLACK);
-    DrawText("Press 3 to set Apple amount to 10", windowSize.x / 40, windowSize.y / 20 + 80,  25, BLACK);
-    DrawText(TextFormat("Amount of Apples: %d", appleAmount), windowSize.x / 40, windowSize.y / 20 + 120, 25, BLACK);
-
-    DrawText("Press ctrl+c to quit application", windowSize .x / 40, windowSize.y - 25, 20, BLACK);
-    DrawRightText(TextFormat("Width: %d Width: %d", (int)windowSize.x, (int)windowSize.y), windowSize.x - 100, windowSize.y - 25, 20, BLACK);
+    DrawText("Press ctrl+c to quit application", windowSize .x / 40, windowSize.y - 25, 20, secondaryColor);
+    DrawRightText(TextFormat("Height: %d Width: %d", (int)windowSize.x, (int)windowSize.y), windowSize.x - 100, windowSize.y - 25, 20, secondaryColor);
 }
 
 
 static void initGrid() {
-    ClearBackground(RAYWHITE);
+    ClearBackground(primaryColor);
     for (int i = gridPixelSize; i < windowSize.x; i += gridPixelSize) {
         for (int j = gridPixelSize; j < windowSize.y; j += gridPixelSize) {
-            DrawRectangle(i, j, 3, 3, BLACK);
+            DrawRectangle(i, j, 3, 3, secondaryColor);
         }
     }
 }
@@ -195,10 +197,10 @@ static void renderGridSquares() {
         for (int x = 0; x < cols; x++) {
             if (grid[y][x].head) {
                 DrawRectangle(grid[y][x].position.x + 2,  grid[y][x].position.y + 2,  48, 48, DARKGREEN);
-                DrawRectangle(grid[y][x].position.x + 10, grid[y][x].position.y + 10, 5,  5,  WHITE);
-                DrawRectangle(grid[y][x].position.x + 38, grid[y][x].position.y + 10, 5,  5,  WHITE);
-                DrawRectangle(grid[y][x].position.x + 12, grid[y][x].position.y + 12, 2,  2,  BLACK);
-                DrawRectangle(grid[y][x].position.x + 40, grid[y][x].position.y + 12, 2,  2,  BLACK);
+                DrawRectangle(grid[y][x].position.x + 10, grid[y][x].position.y + 10, 5,  5,  primaryColor);
+                DrawRectangle(grid[y][x].position.x + 38, grid[y][x].position.y + 10, 5,  5,  primaryColor);
+                DrawRectangle(grid[y][x].position.x + 12, grid[y][x].position.y + 12, 2,  2,  secondaryColor);
+                DrawRectangle(grid[y][x].position.x + 40, grid[y][x].position.y + 12, 2,  2,  secondaryColor);
             } else if (grid[y][x].body) {
                 DrawRectangle(grid[y][x].position.x + 2,  grid[y][x].position.y + 2,  48, 48, DARKGREEN);
             } else if (grid[y][x].food) {
@@ -207,7 +209,7 @@ static void renderGridSquares() {
         }
     }
 
-    DrawCenteredText(TextFormat("Score: %d", snakeLength - 2), windowSize.x / 2, 50, 50, BLACK);
+    DrawCenteredText(TextFormat("Score: %d", snakeLength - 2), windowSize.x / 2, 50, 50, secondaryColor);
 }
 
 
@@ -260,12 +262,24 @@ static void reset() {
     createApples();
 }
 
+void setupSettings() {
+    appleAmountMenu.appendOption(DropdownMenuItem<int>("1", 1));
+    appleAmountMenu.appendOption(DropdownMenuItem<int>("5", 5));
+    appleAmountMenu.appendOption(DropdownMenuItem<int>("10", 10));
+    appleAmountMenu.appendOption(DropdownMenuItem<int>("50", 50));
+
+    snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Slow", 1.0f));
+    snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Medium", 2.0f));
+    snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Fast", 3.0f));
+}
+
 
 void runSnakeApplication() {
     if (firstLaunch) {
         importSettings();
         cols = windowSize.x / gridPixelSize;
         rows = windowSize.y / gridPixelSize;
+        setupSettings();
 
         grid.resize(rows, std::vector<Square>(cols));
 

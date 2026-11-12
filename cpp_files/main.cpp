@@ -7,6 +7,8 @@
 #include <thread>
 #include <chrono>
 
+std::string FPS;
+
 int main() {
     developerMode = true;
     openApplication = 0;
@@ -18,7 +20,7 @@ int main() {
     textureLoading();
 
     // Starting a thread to mesure battery status
-    std::thread batteryThread(batteryMeasure);
+    std::thread batteryMeassureThread(batteryMeasure);
 
     while (!IsWindowReady()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -30,8 +32,9 @@ int main() {
         desktop.at(openApplication).open();
         topMenu();
         if (developerMode) {
-            DrawRectangle(0, 0, MeasureText(("FPS: " + std::to_string(GetFPS())).c_str(), windowSize.y / 20) + 20, windowSize.y / 20 + 20, primaryColor);
-            DrawText(("FPS: " + std::to_string(GetFPS())).c_str(), 10, 10, windowSize.y / 20, secondaryColor);
+            FPS = ("FPS: " + std::to_string(GetFPS()));
+            DrawRectangle(0, 0, MeasureText(FPS.c_str(), windowSize.y / 20) + 20, windowSize.y / 20 + 20, primaryColor);
+            DrawText(FPS.c_str(), 10, 10, windowSize.y / 20, secondaryColor);
         }
         EndDrawing();
     }
@@ -40,7 +43,7 @@ int main() {
     textureUnloading();
 
     // Waiting for the battery thread to finish
-    batteryThread.join();
+    batteryMeassureThread.join();
 
     CloseWindow();
     if (restart) {

@@ -63,7 +63,7 @@ class DropdownMenu {
         return menuOptions.at(at);
     }
 
-    void draw(int x, int y, int fontSize, Color color) {
+    void draw(int x, int y, int fontSize, bool showName = false, Color color = secondaryColor) {
         this->fontSize = fontSize > 0 ? fontSize : 1;
         rectanglePosition.x = static_cast<float>(x);
         rectanglePosition.y = static_cast<float>(y);
