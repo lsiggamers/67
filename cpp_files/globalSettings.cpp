@@ -13,13 +13,12 @@ Color primaryColor = { 255, 255, 255, 255 };
 Color secondaryColor = { 0, 0, 0, 255 };
 
 
-static int resolutionSelection, width, height;
+static int resolutionSelection;
 static bool foundWidth, foundHeight;
 
 void importApplauncherSettings() {
-    int resolutionSelection;
-    int width, height;
-    bool foundWidth = false, foundHeight = false;
+    foundWidth = false;
+    foundHeight = false;
     std::string line;
     std::ifstream file("settings_files/appLauncherSettings.txtsettings");
 
