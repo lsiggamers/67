@@ -5,6 +5,7 @@
 #include "dropDown.hpp"
 #include <vector>
 #include <fstream>
+#include <cstdint>
 #include <nlohmann/json.hpp>
 
 class Square {
@@ -13,7 +14,7 @@ class Square {
     bool body;
     bool food;
     Vector2 position;
-    int snakePosition;
+    int8_t snakePosition;
 
     void clear() {
         head = false;
@@ -35,13 +36,14 @@ static Vector2 headPosition;
 static Vector2 lastHeadPosition;
 static const int gridPixelSize = 50;
 static bool firstLaunch = true;
-static int moveDirection, lastDirection, cols, rows, snakeLength, appleAmount, currentApples, highScore;
+static int8_t moveDirection, lastDirection, appleAmount, currentApples;
+static int  cols, rows, snakeLength, highScore;
 static bool isDead, isPaused, escape, foundHighScore;
 static float moveTimer = 0.0f;
 static float moveDelay; 
 static std::vector<std::vector<Square>> grid;
 
-DropdownMenu<int> appleAmountMenu(&appleAmount);
+DropdownMenu<int8_t> appleAmountMenu(&appleAmount);
 DropdownMenu<float> snakeSpeedMenu(&moveDelay);
 
 
@@ -262,15 +264,16 @@ static void reset() {
     createApples();
 }
 
-void setupSettings() {
-    appleAmountMenu.appendOption(DropdownMenuItem<int>("1", 1));
-    appleAmountMenu.appendOption(DropdownMenuItem<int>("5", 5));
-    appleAmountMenu.appendOption(DropdownMenuItem<int>("10", 10));
-    appleAmountMenu.appendOption(DropdownMenuItem<int>("50", 50));
+
+static void setupSettings() {
+    appleAmountMenu.appendOption(DropdownMenuItem<int8_t>("1", 1));
+    appleAmountMenu.appendOption(DropdownMenuItem<int8_t>("5", 5));
+    appleAmountMenu.appendOption(DropdownMenuItem<int8_t>("10", 10));
+    appleAmountMenu.appendOption(DropdownMenuItem<int8_t>("50", 50));
 
     snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Slow", 1.0f));
-    snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Medium", 2.0f));
-    snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Fast", 3.0f));
+    snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Medium", 0.75f));
+    snakeSpeedMenu.appendOption(DropdownMenuItem<float>("Fast", 0.5f));
 }
 
 
@@ -308,6 +311,6 @@ void runSnakeApplication() {
 
     if (isDead) {
         reset();
+        updateHighScore();
     }
-    updateHighScore();
 }
