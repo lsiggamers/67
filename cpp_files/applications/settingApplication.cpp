@@ -7,17 +7,21 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cstdint>
+
 
 static int test;
 
-static int openWindow, sideMenuItemWidth, mouseX, mouseY;
+static uint8_t openWindow;
+static int sideMenuItemWidth, mouseX, mouseY;
 static bool firstLaunch = true;
+
 
 class sideMenuItem {
     private:
     public:
     std::string menuName;
-    int menuNum;
+    uint8_t menuNum;
     ScreenPosition menuPosition;
 
     void open() {
@@ -37,13 +41,12 @@ class sideMenuItem {
     }
 };
 
+
 static std::vector<sideMenuItem> sideMenu;
-static sideMenuItem displayMenu(0, "Display");
-static sideMenuItem otherMenu(1, "Other");
+
 
 static DropdownMenu<int> displayMenuOptions(&test);
-static DropdownMenuItem<int> displayOption1("Option1", 1);
-static DropdownMenuItem<int> displayOption2("Option 2", 2);
+
 
 static void input() {
     switch (openWindow) {
@@ -68,15 +71,15 @@ static void input() {
 
 
 static void createDisplayMenuOptions() {
-    displayMenuOptions.appendOption(displayOption1);
-    displayMenuOptions.appendOption(displayOption2);
+    displayMenuOptions.appendOption(DropdownMenuItem<int>("Option 1", 1));
+    displayMenuOptions.appendOption(DropdownMenuItem<int>("Option 2", 2));
 }
 
 
 static void createSideMenu() {
     sideMenu.clear();
-    sideMenu.push_back(displayMenu);
-    sideMenu.push_back(otherMenu);
+    sideMenu.push_back(sideMenuItem(0, "Display"));
+    sideMenu.push_back(sideMenuItem(1, "Other"));
 
     for (int i = 0; i < sideMenu.size(); i++) {
         sideMenu.at(i).setPosition(windowSize.x / 60, i * (windowSize.y / 50) + i * 5 + windowSize.y / 19);
@@ -123,5 +126,4 @@ void runSettingsApplication() {
         default: renderMainMenu(); break;
     }
     renderSideMenu();
-    // std::cout << "Test: " << test << std::endl;
 }
