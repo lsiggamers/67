@@ -12,10 +12,11 @@
 #include "drawing.hpp"
 
 #include <vector>
+#include <cstdint>
 
 static bool closeProcedure;
-static int cols, rows, vectorCycle, mouseX, mouseY, vectorPosition;
-
+static int vectorCycle, mouseX, mouseY, vectorPosition;
+static uint8_t cols, rows;
 
 static void menuInput() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C) && !IsKeyDown(KEY_LEFT_SHIFT)) {
