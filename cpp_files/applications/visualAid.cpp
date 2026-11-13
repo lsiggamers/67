@@ -1,15 +1,18 @@
-#include <string>
-#include <vector>
-#include <filesystem>
-#include <algorithm>
 #include "raylib.h"
 #include "globalFunc.hpp"
 #include "visualAid.hpp"
 #include "globalSettings.hpp"
 
-static int speedModifier = 1;
+#include <string>
+#include <vector>
+#include <filesystem>
+#include <algorithm>
+#include <cstdint>
 
-static int selectedBackground = 0;
+
+static uint8_t speedModifier = 1;
+
+static uint8_t selectedBackground = 0;
 static const double MOVE_INTERVAL = 1.0 / 5.0;
 static double lastMoveTime = 0.0;
 static double currentTime;
