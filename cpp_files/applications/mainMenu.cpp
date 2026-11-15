@@ -10,6 +10,7 @@
 #include "visualAid.hpp"
 #include "thing3d.hpp"
 #include "drawing.hpp"
+#include "game.hpp"
 
 #include <vector>
 #include <cstdint>
@@ -65,6 +66,7 @@ void createApplications() {
     desktop.push_back(application(runVisualAidApplication, "Visual Aid", loadVisualAidTextures, unloadVisualAidTextures));
     desktop.push_back(application(runThing3dApplication, "3d Thing"));
     desktop.push_back(application(runDrawingApplication, "Drawing"));
+    desktop.push_back(application(runGameApplication, "Game"));
 
     // Add the texture loader for system programs to the list, not application programs, as they are added in their respective application files
     systemTextureLoaders.push_back(loadBatteryTextures);
