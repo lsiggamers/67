@@ -20,26 +20,19 @@ static int batteryIconWidth;
 static int batteryIconHeight;
 static int chargingIconWidth;
 
-static Texture2D loadTexture(const char* path) {
-    Image image = LoadImage(path);
-    ImageResize(&image, batteryIconWidth, batteryIconHeight);
-    Texture2D texture = LoadTextureFromImage(image);
-    UnloadImage(image);
-    return texture;
-}
 
 void loadBatteryTextures() {
     batteryIconHeight = windowSize.y / 40;
     batteryIconWidth = batteryIconHeight * 130 / 80;
 
     batteryTextures.clear();
-    batteryTextures.push_back(loadTexture("assets/batteryIcons/desktop.png"));
-    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery100.png"));
-    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery75.png"));
-    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery50.png"));
-    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery25.png"));
-    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery0.png"));
-    batteryTextures.push_back(loadTexture("assets/batteryIcons/charging.png"));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/desktop.png", batteryIconWidth, batteryIconHeight));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery100.png", batteryIconWidth, batteryIconHeight));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery75.png", batteryIconWidth, batteryIconHeight));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery50.png", batteryIconWidth, batteryIconHeight));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery25.png", batteryIconWidth, batteryIconHeight));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery0.png", batteryIconWidth, batteryIconHeight));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/charging.png", chargingIconWidth, batteryIconHeight));
 }
 
 void batteryMeasure() {

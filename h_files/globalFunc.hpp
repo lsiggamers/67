@@ -20,3 +20,5 @@ void DrawRightText(const char* text, int x, int y, int fontSize, Color color);
 int randomInt(int min, int max);
 
 Image ImageResizeReturn(Image& tmpImg, int newWidth, int newHeight);
+
+Texture2D loadTexture(const char* path, int x, int y);

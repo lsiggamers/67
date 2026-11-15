@@ -28,3 +28,11 @@ Image ImageResizeReturn(Image& tmpImg, int newWidth, int newHeight) {
     ImageResize(&tmpImg, newWidth, newHeight);
     return tmpImg;
 }
+
+Texture2D loadTexture(const char* path, int x, int y) {
+    Image image = LoadImage(path);
+    ImageResize(&image, x, y);
+    Texture2D texture = LoadTextureFromImage(image);
+    UnloadImage(image);
+    return texture;
+}
