@@ -9,9 +9,10 @@
 #include <vector>
 #include <iostream>
 #include <thread>
+#include <atomic>
 
-static bool charging, batteryPresent;
-static int capacity;
+static std::atomic<bool> charging(false), batteryPresent(false);
+static std::atomic<uint8_t> capacity(0);
 
 static std::vector<Texture2D> batteryTextures;
 
@@ -19,45 +20,30 @@ static int batteryIconWidth;
 static int batteryIconHeight;
 static int chargingIconWidth;
 
+static Texture2D loadTexture(const char* path) {
+    Image image = LoadImage(path);
+    ImageResize(&image, batteryIconWidth, batteryIconHeight);
+    Texture2D texture = LoadTextureFromImage(image);
+    UnloadImage(image);
+    return texture;
+}
+
 void loadBatteryTextures() {
     batteryIconHeight = windowSize.y / 40;
     batteryIconWidth = batteryIconHeight * 130 / 80;
 
-    Image desktopImg =    LoadImage("assets/batteryIcons/desktop.png");
-    Image batteryImg100 = LoadImage("assets/batteryIcons/battery100.png");
-    Image batteryImg75 =  LoadImage("assets/batteryIcons/battery75.png");
-    Image batteryImg50 =  LoadImage("assets/batteryIcons/battery50.png");
-    Image batteryImg25 =  LoadImage("assets/batteryIcons/battery25.png");
-    Image batteryImg0 =   LoadImage("assets/batteryIcons/battery0.png");
-    Image chargingImg =   LoadImage("assets/batteryIcons/charging.png");
-
-    Texture2D desktopTexture =    LoadTextureFromImage(ImageResizeReturn(desktopImg,    batteryIconWidth,  batteryIconHeight));
-    Texture2D batteryTexture100 = LoadTextureFromImage(ImageResizeReturn(batteryImg100, batteryIconWidth,  batteryIconHeight));
-    Texture2D batteryTexture75 =  LoadTextureFromImage(ImageResizeReturn(batteryImg75,  batteryIconWidth,  batteryIconHeight));
-    Texture2D batteryTexture50 =  LoadTextureFromImage(ImageResizeReturn(batteryImg50,  batteryIconWidth,  batteryIconHeight));
-    Texture2D batteryTexture25 =  LoadTextureFromImage(ImageResizeReturn(batteryImg25,  batteryIconWidth,  batteryIconHeight));
-    Texture2D batteryTexture0 =   LoadTextureFromImage(ImageResizeReturn(batteryImg0,   batteryIconWidth,  batteryIconHeight));
-    Texture2D chargingTexture =   LoadTextureFromImage(ImageResizeReturn(chargingImg,   chargingIconWidth, batteryIconHeight));
-
     batteryTextures.clear();
-    batteryTextures.push_back(desktopTexture);
-    batteryTextures.push_back(batteryTexture100);
-    batteryTextures.push_back(batteryTexture75);
-    batteryTextures.push_back(batteryTexture50);
-    batteryTextures.push_back(batteryTexture25);
-    batteryTextures.push_back(batteryTexture0);
-    batteryTextures.push_back(chargingTexture);
-
-    UnloadImage(desktopImg);
-    UnloadImage(batteryImg100);
-    UnloadImage(batteryImg75);
-    UnloadImage(batteryImg50);
-    UnloadImage(batteryImg25);
-    UnloadImage(batteryImg0);
-    UnloadImage(chargingImg);
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/desktop.png"));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery100.png"));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery75.png"));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery50.png"));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery25.png"));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/battery0.png"));
+    batteryTextures.push_back(loadTexture("assets/batteryIcons/charging.png"));
 }
 
 void batteryMeasure() {
+    int newCapacity;
     while (!globalShutoff) {
         if (std::filesystem::exists("/sys/class/power_supply/BAT0/status")) {
             std::ifstream file("/sys/class/power_supply/BAT0/status");
@@ -72,13 +58,15 @@ void batteryMeasure() {
 
         if (batteryPresent && std::filesystem::exists("/sys/class/power_supply/BAT0/capacity")) {
             std::ifstream file("/sys/class/power_supply/BAT0/capacity");
-            file >> capacity;
+            if (file >> newCapacity) {
+                capacity = newCapacity;
+            }
             file.close();
         }
 
         std::this_thread::sleep_for(std::chrono::seconds(2));
         if (globalShutoff) {
-            break;
+            return;
         }
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
@@ -101,8 +89,8 @@ void drawBatteryMenu() {
     topMenuSpot += batteryIconWidth + topMenuPadding;
 
     if (batteryPresent) {
-        DrawRightText(TextFormat("%d\%", capacity), windowSize.x - topMenuSpot, 5, windowSize.y / 40, BLACK);
-        topMenuSpot += MeasureText(TextFormat("%d\%", capacity), windowSize.x / 40) + topMenuPadding;
+        DrawRightText(TextFormat("%d\%", int(capacity)), windowSize.x - topMenuSpot, 5, windowSize.y / 40, BLACK);
+        topMenuSpot += MeasureText(TextFormat("%d\%", int(capacity)), windowSize.x / 40) + topMenuPadding;
     } else {
         DrawRightText("Desktop", windowSize.x - topMenuSpot, 5, windowSize.y / 40, BLACK);
         topMenuSpot += MeasureText("Desktop", windowSize.x / 40) + topMenuPadding;
