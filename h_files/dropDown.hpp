@@ -30,7 +30,6 @@ class DropdownMenuItem {
 template <typename T = int>
 class DropdownMenu {
     private:
-    
     T* modifyVariable;
     bool isOpen;
 
@@ -53,7 +52,6 @@ class DropdownMenu {
     }
 
     public:
-
     void appendOption(const DropdownMenuItem<T>& appendable) {
         menuOptions.push_back(appendable);
         rectangleResize();
