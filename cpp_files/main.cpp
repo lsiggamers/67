@@ -7,10 +7,12 @@
 #include <thread>
 #include <chrono>
 
-std::string FPS;
+#define DEVELOPERMODE false
+#if DEVELOPERMODE
+    std::string FPS;
+#endif
 
 int main() {
-    developerMode = true;
     openApplication = 0;
     importApplauncherSettings();
     InitWindow(windowSize.x, windowSize.y, "AppLauncher");
@@ -31,11 +33,11 @@ int main() {
         BeginDrawing();
         desktop.at(openApplication).open();
         topMenu();
-        if (developerMode) {
+#if DEVELOPERMODE
             FPS = ("FPS: " + std::to_string(GetFPS()));
             DrawRectangle(0, 0, MeasureText(FPS.c_str(), windowSize.y / 20) + 20, windowSize.y / 20 + 20, primaryColor);
             DrawText(FPS.c_str(), 10, 10, windowSize.y / 20, secondaryColor);
-        }
+#endif
         EndDrawing();
     }
     
