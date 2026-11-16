@@ -19,6 +19,12 @@ static void input() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
         openApplication = 0;
     }
+    if (IsKeyPressed(KEY_RIGHT) && currentLevel < levels.size() - 1) {
+        currentLevel++;
+    }
+    if (IsKeyPressed(KEY_LEFT) && currentLevel > 0) {
+        currentLevel--;
+    }
 }
 
 // Main rendering function for the game application
@@ -27,13 +33,13 @@ static void render() {
     if (levels.empty()) {
         return; // No levels to render
     } else {
-        levels.at(int(currentLevel) - 1).render();  
+        levels.at(int(currentLevel)).render();  
     }
 }
 
 // Resets the game state variables
 static void resetGame() {
-    currentLevel = 1;
+    currentLevel = 0;
 }
 
 // Main function to run the game application

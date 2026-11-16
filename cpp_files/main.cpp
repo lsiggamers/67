@@ -7,7 +7,7 @@
 #include <thread>
 #include <chrono>
 
-#define DEVELOPERMODE false
+#define DEVELOPERMODE true
 #if DEVELOPERMODE
     std::string FPS;
 #endif
