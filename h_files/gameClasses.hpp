@@ -43,6 +43,71 @@ private:
     TileMap tileMap; // Instance of TileMap to manage tile textures
     uint8_t tileData[TILE_GRID_SIZE_X][TILE_GRID_SIZE_Y]; // TILE_GRID_SIZE_X x TILE_GRID_SIZE_Y grid of tiles, each tile represented by a uint8_t
 
+
+    void tileDataRecalculationLogic(int x, int y) {
+        if (tileData[x][y + 1] != 10) {
+            if (tileData[x + 1][y] != 10) {
+                if (tileData[x - 1][y] != 10) {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 4;
+                    } else {
+                        tileData[x][y] = 1;
+                    }
+                } else {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 3;
+                    } else {
+                        tileData[x][y] = 0;
+                    }
+                }
+            } else {
+                if (tileData[x - 1][y] != 10) {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 5;
+                    } else {
+                        tileData[x][y] = 2;
+                    }
+                } else {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 4;
+                    } else {
+                        tileData[x][y] = 1;
+                    }
+                }
+            }
+        } else {
+            if (tileData[x + 1][y] != 10) {
+                if (tileData[x - 1][y] != 10) {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 7;
+                    } else {
+                        tileData[x][y] = 1;
+                    }
+                } else {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 6;
+                    } else {
+                        tileData[x][y] = 0;
+                    }
+                }
+            } else {
+                if (tileData[x - 1][y] != 10) {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 8;
+                    } else {
+                        tileData[x][y] = 2;
+                    }
+                } else {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 7;
+                    } else {
+                        tileData[x][y] = 1;
+                    }
+                }
+            }
+        }
+    }
+    
     // Recalculates which texture each tile should be
     void tileDataRecalculate() {
         for (int x = 0; x < TILE_GRID_SIZE_X; x++) {
@@ -55,11 +120,7 @@ private:
                     }
                     
                     // Logic here
-                    if (y == 0 || tileData[x][y - 1] != 10) { // If the tile is at the top row or the tile above is not blank
-                        
-                    } else { // If the tile above is black
-                        if (tilData[])
-                    }
+                    tileDataRecalculationLogic(x, y);
                 }
             }
         }
@@ -99,7 +160,7 @@ public:
                 for (int y = 0; y < TILE_GRID_SIZE_Y; y++) {
                     std::cout << "YASSS\n";
                     if (jsonData["tileData"][x][y] == true) {
-                        tileData[x][y] = 5; // Set to the fifth tile texture
+                        tileData[x][y] = 4; // Set to the fifth tile texture
                     } else {
                         tileData[x][y] = 10; // Set to blank tile
                     }
