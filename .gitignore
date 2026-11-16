@@ -2,6 +2,7 @@
 settings_files/*.txtSettings
 settings_files/*.json
 raylib.h
+json.hpp
 
 
 
