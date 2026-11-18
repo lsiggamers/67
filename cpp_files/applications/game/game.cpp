@@ -19,12 +19,6 @@ static void input() {
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
         openApplication = 0;
     }
-    if (IsKeyPressed(KEY_RIGHT) && currentLevel < levels.size() - 1) {
-        currentLevel++;
-    }
-    if (IsKeyPressed(KEY_LEFT) && currentLevel > 0) {
-        currentLevel--;
-    }
 }
 
 // Main rendering function for the game application

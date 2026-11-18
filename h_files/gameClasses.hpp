@@ -13,6 +13,8 @@
 #define TILE_GRID_SIZE_X 10 // Define the size of a tile grid in a level
 #define TILE_GRID_SIZE_Y 10 // Define the size of a tile grid in a level
 
+#define DEFAULT_CHARACTER_WIDTH
+
 
 class TileMap {
 private:
@@ -21,17 +23,17 @@ public:
     // Returns it Texture at n's position
     Texture2D at(int n) {
         if (n < 0 || n > 9) {
-            std::cout << "ERROR: Out of bounds. The position in the array yo uare trying to reach is out of bounds. Closing program";
-            globalShutoff = true;
-            return;
+            std::cout << "ERROR: Out of bounds. The position in the array you are trying to reach is out of bounds. Returning debugTexture";
+            return tileTextures[0];
         }
         return tileTextures[n];
     }
 
-    TileMap(const char* file) {
-        std::string filePath = file ? file : "";
+    TileMap(const char* path) {
+        std::string filePath = path ? path : "";
         if (filePath.size() >= 5 && filePath.compare(filePath.size() - 5, 5, "1.png") == 0) {
-            for (int i = 0; i < 9; i++) {
+            tileTextures[0] = loadTexture("assets/game/1debug.png", windowSize.x / TILE_GRID_SIZE_X, windowSize.y / TILE_GRID_SIZE_Y);
+            for (int i = 1; i <= 9; i++) {
                 filePath[filePath.size() - 5] = static_cast<char>('1' + i);
                 tileTextures[i] = loadTexture(filePath.c_str(), windowSize.x / TILE_GRID_SIZE_X, windowSize.y / TILE_GRID_SIZE_Y);
             }
@@ -49,7 +51,7 @@ private:
     uint8_t tileData[TILE_GRID_SIZE_X][TILE_GRID_SIZE_Y]; // TILE_GRID_SIZE_X x TILE_GRID_SIZE_Y grid of tiles, each tile represented by a uint8_t
 
     // Logic only implemented in void tileDataRecalculate()
-    static void tileDataRecalculationLogic(int x, int y) {
+    void tileDataRecalculationLogic(int x, int y) {
         if (tileData[x][y + 1] != 10) {
             if (tileData[x + 1][y] != 10) {
                 if (tileData[x - 1][y] != 10) {
@@ -203,10 +205,12 @@ public:
         levelTiles.render();
     }
 
-    // Default constructor to initialize a level
-    Level(Texture2D backgroundTexture, LevelTiles tileMap) : levelBackgroundTexture(backgroundTexture), levelTiles(tileMap) {
-        // Constructor implementation
-    };
+    /*Default constructor to initialize a level. Pass the path for the background texture for the level (No effect on gameplay),
+    pass the path for the first tile in the folder where the 9 tiles are stored,
+    pass the path for the .json with the data for tile placement for the level. */
+    Level(const char* backgroundTexturePath, const char* tileMapPath, const char* levelTilesPath)
+    : levelBackgroundTexture(loadTexture(backgroundTexturePath, windowSize.x, windowSize.y)),
+      levelTiles(TileMap(tileMapPath), levelTilesPath) {}
 };
 
 class CharacterPosition {
@@ -214,6 +218,22 @@ private:
     float x;
     float y;
 public:
+    // Default move function, if you want to set the value use setX() and/or setY()
+    void move(float leftRight, float upDown) {
+        x =+ leftRight;
+        y =+ upDown;
+    }
+
+    // Used to set x to a new value
+    void setX(float newX){
+        x = newX;
+    }
+
+    // Used to set y to a new value
+    void setY(float newY) {
+        y = newY;
+    }
+
     // Default constructor, 
     CharacterPosition(float x, float y) : x(x), y(y) {
         // Constructor implementation
@@ -226,14 +246,30 @@ private:
 
     bool hostile;
 public:
+    Texture2D characterTexture;
 
+    CharacterPosition characterPosition; // The current position of the character
 
-
-    void move(float lenght, uint8_t, direction) {
-
+    // Default move function
+    void move(float leftRight = 0.0f, float upDown = 0.0f) {
+        characterPosition.move(leftRight, upDown);
     }
 
     Character();
+};
+
+
+class NPC : public Character {
+private:
+    bool hostile; // Wether or not the player should die when they come in contact
+    // Store the program for how the npc should move
+public:
+    // Default constructor
+    NPC(const char* characterTexturePath)
+    ; characterTexture(loadTexture(characterTexturePath,))
+    {
+
+    }
 };
 
 
@@ -241,7 +277,10 @@ class Player : public Character {
 private:
 
 public:
-    Player();
+    // Default constructer
+    Player() {
+
+    }
 };
 
 
