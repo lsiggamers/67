@@ -18,9 +18,14 @@ class TileMap {
 private:
     Texture2D tileTextures[9]; // Array to hold 9 different tile textures for the tile map
 public:
-    // 
-    Texture2D at(int position) {
-        return tileTextures[position];
+    // Returns it Texture at n's position
+    Texture2D at(int n) {
+        if (n < 0 || n > 9) {
+            std::cout << "ERROR: Out of bounds. The position in the array yo uare trying to reach is out of bounds. Closing program";
+            globalShutoff = true;
+            return;
+        }
+        return tileTextures[n];
     }
 
     TileMap(const char* file) {
@@ -43,8 +48,8 @@ private:
     TileMap tileMap; // Instance of TileMap to manage tile textures
     uint8_t tileData[TILE_GRID_SIZE_X][TILE_GRID_SIZE_Y]; // TILE_GRID_SIZE_X x TILE_GRID_SIZE_Y grid of tiles, each tile represented by a uint8_t
 
-
-    void tileDataRecalculationLogic(int x, int y) {
+    // Logic only implemented in void tileDataRecalculate()
+    static void tileDataRecalculationLogic(int x, int y) {
         if (tileData[x][y + 1] != 10) {
             if (tileData[x + 1][y] != 10) {
                 if (tileData[x - 1][y] != 10) {
@@ -158,7 +163,6 @@ public:
 
             for (int x = 0; x < TILE_GRID_SIZE_X; x++) {
                 for (int y = 0; y < TILE_GRID_SIZE_Y; y++) {
-                    std::cout << "YASSS\n";
                     if (jsonData["tileData"][x][y] == true) {
                         tileData[x][y] = 4; // Set to the fifth tile texture
                     } else {
@@ -190,14 +194,11 @@ public:
 class Level {
 private:
     Texture2D levelBackgroundTexture;
-    
 public:
-
     LevelTiles levelTiles; // Instance of LevelTiles to manage tile data
     
     // Method to render the level
     void render() {
-        // Implement rendering logic for the level here
         DrawTexture(levelBackgroundTexture, 0, 0, WHITE);
         levelTiles.render();
     }
@@ -208,11 +209,30 @@ public:
     };
 };
 
+class CharacterPosition {
+private:
+    float x;
+    float y;
+public:
+    // Default constructor, 
+    CharacterPosition(float x, float y) : x(x), y(y) {
+        // Constructor implementation
+    }
+};
+
 
 class Character {
 private:
 
+    bool hostile;
 public:
+
+
+
+    void move(float lenght, uint8_t, direction) {
+
+    }
+
     Character();
 };
 
