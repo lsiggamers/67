@@ -13,12 +13,13 @@
 #define TILE_GRID_SIZE_X 10 // Define the size of a tile grid in a level
 #define TILE_GRID_SIZE_Y 10 // Define the size of a tile grid in a level
 
-#define DEFAULT_CHARACTER_WIDTH
+#define DEFAULT_CHARACTER_WIDTHX 16
+#define DEFAULT_CHARACTER_HEIGHTY 16
 
 
 class TileMap {
 private:
-    Texture2D tileTextures[9]; // Array to hold 9 different tile textures for the tile map
+    Texture2D tileTextures[9]; // Array to hold 9 different tile textures for the tile map + debug at 0
 public:
     // Returns it Texture at n's position
     Texture2D at(int n) {
@@ -29,6 +30,7 @@ public:
         return tileTextures[n];
     }
 
+    // Default constructor to create TileMap, pass the path for the first tile in the folder where the 9 tiles are stored.
     TileMap(const char* path) {
         std::string filePath = path ? path : "";
         if (filePath.size() >= 5 && filePath.compare(filePath.size() - 5, 5, "1.png") == 0) {
@@ -40,6 +42,13 @@ public:
         } else {
             std::cout << "Error: Invalid file format. Expected a PNG file ending in \"1.png\" in creation of TileMap.\n";
             globalShutoff = true; // Set globalShutoff to true to indicate an error
+        }
+    }
+
+    // Deconstructer, making sure textures are unloaded
+    ~TileMap() {
+        for (Texture2D i : tileTextures) {
+            UnloadTexture(i);
         }
     }
 };
@@ -183,7 +192,6 @@ public:
 
     // Constructor to load textures and manually initialize tileData
     LevelTiles(TileMap tileMap) : tileMap(tileMap) {
-        // Constructor implementation
         for (int x = 0; x < TILE_GRID_SIZE_X; x++) {
             for (int y = 0; y < TILE_GRID_SIZE_Y; y++) {
                 tileData[x][y] = 10; // Initialize all tiles to be blank (represented by 10)
@@ -195,7 +203,7 @@ public:
 
 class Level {
 private:
-    Texture2D levelBackgroundTexture;
+    Texture2D levelBackgroundTexture; // Background texture for the level (No effect on gameplay)
 public:
     LevelTiles levelTiles; // Instance of LevelTiles to manage tile data
     
@@ -214,48 +222,35 @@ public:
 };
 
 class CharacterPosition {
-private:
-    float x;
-    float y;
 public:
+    float x; // x-position
+    float y; // y-position
+
     // Default move function, if you want to set the value use setX() and/or setY()
     void move(float leftRight, float upDown) {
         x =+ leftRight;
         y =+ upDown;
     }
 
-    // Used to set x to a new value
-    void setX(float newX){
-        x = newX;
-    }
-
-    // Used to set y to a new value
-    void setY(float newY) {
-        y = newY;
-    }
-
-    // Default constructor, 
-    CharacterPosition(float x, float y) : x(x), y(y) {
-        // Constructor implementation
-    }
+    // Default constructor
+    CharacterPosition(float x = 0, float y = 0) : x(x), y(y) {}
 };
 
 
 class Character {
-private:
-
-    bool hostile;
-public:
-    Texture2D characterTexture;
-
+protected:
+    Texture2D characterTexture; // The texture drawn when the character is rendered
     CharacterPosition characterPosition; // The current position of the character
-
+public:
     // Default move function
     void move(float leftRight = 0.0f, float upDown = 0.0f) {
         characterPosition.move(leftRight, upDown);
     }
 
-    Character();
+    // Render the Character
+    void render() {
+        DrawTexture(characterTexture, characterPosition.x + DEFAULT_CHARACTER_WIDTHX / 2, characterPosition.y + DEFAULT_CHARACTER_HEIGHTY / 2, WHITE);
+    }
 };
 
 
@@ -265,24 +260,34 @@ private:
     // Store the program for how the npc should move
 public:
     // Default constructor
-    NPC(const char* characterTexturePath)
-    ; characterTexture(loadTexture(characterTexturePath,))
-    {
+    NPC(const char* characterTexturePath, float startX, float startY) {
+        characterTexture = loadTexture(characterTexturePath, DEFAULT_CHARACTER_WIDTHX, DEFAULT_CHARACTER_HEIGHTY);
+        characterPosition.x = startX;
+        characterPosition.y = startY;
+    }
 
+    // Deconstructer, making sure textures are unloaded
+    ~NPC() {
+        UnloadTexture(characterTexture);
     }
 };
 
 
 class Player : public Character {
-private:
-
 public:
     // Default constructer
-    Player() {
+    Player(const char* characterTexturePath, float startX, float startY) {
+        characterTexture = loadTexture(characterTexturePath, DEFAULT_CHARACTER_WIDTHX, DEFAULT_CHARACTER_HEIGHTY);
+        characterPosition.x = startX;
+        characterPosition.y = startY;
+    }
 
+    // Deconstructer, making sure textures are unloaded
+    ~Player() {
+        UnloadTexture(characterTexture);
     }
 };
 
-
 extern std::vector<Level> levels;
-extern std::vector<Character> characters;
+extern std::vector<NPC> NPCs;
+extern std::vector<Player> players;

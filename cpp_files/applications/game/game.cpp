@@ -9,9 +9,10 @@
 #include <vector>
 
 std::vector<Level> levels;
-std::vector<Character> characters;
+std::vector<NPC> NPCs;
+std::vector<Player> players;
 
-static std::atomic<uint8_t> currentLevel(1);
+static std::atomic<uint8_t> currentLevel(0);
 static bool firstLaunch = true;
 
 // Main input handling function for the game application
@@ -24,10 +25,16 @@ static void input() {
 // Main rendering function for the game application
 static void render() {
     ClearBackground(primaryColor);
-    if (levels.empty()) {
-        return; // No levels to render
-    } else {
+    if (!levels.empty()) {
         levels.at(int(currentLevel)).render();  
+    }
+    if (!NPCs.empty()) {
+        for (int i = 0; i < NPCs.size(); i++) {
+            NPCs.at(i).render();
+        }
+    }
+    if (!players.empty()) {
+        players.at(0).render();
     }
 }
 
