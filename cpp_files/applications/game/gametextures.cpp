@@ -6,7 +6,8 @@
 
 // Loads the game textures
 void loadGameTextures() {
-    levels.push_back(Level("assets/game/1debug.png", "assets/game/tileMaps/debugTiles2/debugTexture1.png", "assets/game/levels/level1.json"));
+    levels.push_back(Level("assets/game/level1.png", "assets/game/tileMaps/debugTiles2/debugTexture1.png", "assets/game/levels/level1.json"));
+    players.push_back(Player("assets/game/1debug.png", float(windowSize.x / 2), float(windowSize.y / 2)));
 }
 
 // Unloads the game textures

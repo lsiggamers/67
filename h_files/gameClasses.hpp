@@ -10,6 +10,10 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+#define developerMode true
+
+#define playerSpeed 0.1f
+
 #define TILE_GRID_SIZE_X 10 // Define the size of a tile grid in a level
 #define TILE_GRID_SIZE_Y 10 // Define the size of a tile grid in a level
 
@@ -19,12 +23,15 @@
 
 class TileMap {
 private:
-    Texture2D tileTextures[9]; // Array to hold 9 different tile textures for the tile map + debug at 0
+    Texture2D tileTextures[10]; // Index 0 is debug; indices 1-9 are the tile textures
 public:
     // Returns it Texture at n's position
     Texture2D at(int n) {
-        if (n < 0 || n > 9) {
-            std::cout << "ERROR: Out of bounds. The position in the array you are trying to reach is out of bounds. Returning debugTexture";
+        if (n == 0) {
+            std::cout << "returned debug texture by request\n";
+            return tileTextures[0];
+        } else if (n < 0 || n > 9) {
+            std::cout << "ERROR: Out of bounds. The position in the array you are trying to reach is out of bounds. Returning debugTexture\n";
             return tileTextures[0];
         }
         return tileTextures[n];
@@ -36,7 +43,7 @@ public:
         if (filePath.size() >= 5 && filePath.compare(filePath.size() - 5, 5, "1.png") == 0) {
             tileTextures[0] = loadTexture("assets/game/1debug.png", windowSize.x / TILE_GRID_SIZE_X, windowSize.y / TILE_GRID_SIZE_Y);
             for (int i = 1; i <= 9; i++) {
-                filePath[filePath.size() - 5] = static_cast<char>('1' + i);
+                filePath[filePath.size() - 5] = static_cast<char>('0' + i);
                 tileTextures[i] = loadTexture(filePath.c_str(), windowSize.x / TILE_GRID_SIZE_X, windowSize.y / TILE_GRID_SIZE_Y);
             }
         } else {
@@ -45,12 +52,15 @@ public:
         }
     }
 
+    /*
     // Deconstructer, making sure textures are unloaded
     ~TileMap() {
+        std::cout << "Tilemap Deconstructor called\n";
         for (Texture2D i : tileTextures) {
             UnloadTexture(i);
         }
     }
+        */
 };
 
 
@@ -65,20 +75,6 @@ private:
             if (tileData[x + 1][y] != 10) {
                 if (tileData[x - 1][y] != 10) {
                     if (tileData[x][y - 1] != 10) {
-                        tileData[x][y] = 4;
-                    } else {
-                        tileData[x][y] = 1;
-                    }
-                } else {
-                    if (tileData[x][y - 1] != 10) {
-                        tileData[x][y] = 3;
-                    } else {
-                        tileData[x][y] = 0;
-                    }
-                }
-            } else {
-                if (tileData[x - 1][y] != 10) {
-                    if (tileData[x][y - 1] != 10) {
                         tileData[x][y] = 5;
                     } else {
                         tileData[x][y] = 2;
@@ -90,23 +86,23 @@ private:
                         tileData[x][y] = 1;
                     }
                 }
-            }
-        } else {
-            if (tileData[x + 1][y] != 10) {
+            } else {
                 if (tileData[x - 1][y] != 10) {
-                    if (tileData[x][y - 1] != 10) {
-                        tileData[x][y] = 7;
-                    } else {
-                        tileData[x][y] = 1;
-                    }
-                } else {
                     if (tileData[x][y - 1] != 10) {
                         tileData[x][y] = 6;
                     } else {
-                        tileData[x][y] = 0;
+                        tileData[x][y] = 3;
+                    }
+                } else {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 5;
+                    } else {
+                        tileData[x][y] = 2;
                     }
                 }
-            } else {
+            }
+        } else {
+            if (tileData[x + 1][y] != 10) {
                 if (tileData[x - 1][y] != 10) {
                     if (tileData[x][y - 1] != 10) {
                         tileData[x][y] = 8;
@@ -118,6 +114,20 @@ private:
                         tileData[x][y] = 7;
                     } else {
                         tileData[x][y] = 1;
+                    }
+                }
+            } else {
+                if (tileData[x - 1][y] != 10) {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 9;
+                    } else {
+                        tileData[x][y] = 3;
+                    }
+                } else {
+                    if (tileData[x][y - 1] != 10) {
+                        tileData[x][y] = 8;
+                    } else {
+                        tileData[x][y] = 2;
                     }
                 }
             }
@@ -188,6 +198,16 @@ public:
             globalShutoff = true; // Set globalShutoff to true to indicate an error
         }
         tileDataRecalculate();
+#if developerMode
+        std::cout << "\n\nLeveldata accosiated with: " << file << " (rotated)\n";
+        for (int x = 0; x < TILE_GRID_SIZE_X; x++) {
+            std::cout << "\n";
+            for (int y = 0; y < TILE_GRID_SIZE_Y; y++) {
+                std::cout << " \"" << int(tileData[x][y]) << "\" ";
+            }
+        }
+        std::cout << std::endl;
+#endif
     }
 
     // Constructor to load textures and manually initialize tileData
@@ -217,8 +237,13 @@ public:
     pass the path for the first tile in the folder where the 9 tiles are stored,
     pass the path for the .json with the data for tile placement for the level. */
     Level(const char* backgroundTexturePath, const char* tileMapPath, const char* levelTilesPath)
-    : levelBackgroundTexture(loadTexture(backgroundTexturePath, windowSize.x, windowSize.y)),
-      levelTiles(TileMap(tileMapPath), levelTilesPath) {}
+    : levelBackgroundTexture(
+        loadTexture(backgroundTexturePath, windowSize.x, windowSize.y)
+    ),
+      levelTiles(
+        TileMap(tileMapPath),
+        levelTilesPath
+    ) {}
 };
 
 class CharacterPosition {
@@ -249,7 +274,7 @@ public:
 
     // Render the Character
     void render() {
-        DrawTexture(characterTexture, characterPosition.x + DEFAULT_CHARACTER_WIDTHX / 2, characterPosition.y + DEFAULT_CHARACTER_HEIGHTY / 2, WHITE);
+        DrawTexture(characterTexture, characterPosition.x - DEFAULT_CHARACTER_WIDTHX / 2, characterPosition.y - DEFAULT_CHARACTER_HEIGHTY / 2, WHITE);
     }
 };
 
@@ -260,7 +285,7 @@ private:
     // Store the program for how the npc should move
 public:
     // Default constructor
-    NPC(const char* characterTexturePath, float startX, float startY) {
+    NPC(const char* characterTexturePath, float startX, float startY, bool hostile = false) : hostile(hostile) {
         characterTexture = loadTexture(characterTexturePath, DEFAULT_CHARACTER_WIDTHX, DEFAULT_CHARACTER_HEIGHTY);
         characterPosition.x = startX;
         characterPosition.y = startY;
@@ -274,7 +299,28 @@ public:
 
 
 class Player : public Character {
+private:
+    bool moved;
+    Vector2 tempMove;
 public:
+
+    void input() {
+        tempMove.x = 0.0f;
+        tempMove.y = 0.0f;
+        moved = false;
+        if (IsKeyPressed(KEY_D)) {
+            tempMove.x = playerSpeed;
+            moved = true;
+        } else if (IsKeyPressed(KEY_A)) {
+            tempMove.x = -1 * playerSpeed;
+            moved = true;
+        }
+
+        if (moved) {
+            move(tempMove.x, tempMove.y);
+        }
+    }
+
     // Default constructer
     Player(const char* characterTexturePath, float startX, float startY) {
         characterTexture = loadTexture(characterTexturePath, DEFAULT_CHARACTER_WIDTHX, DEFAULT_CHARACTER_HEIGHTY);
